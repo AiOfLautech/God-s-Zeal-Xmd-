@@ -4,9 +4,7 @@ const algorithm = 'aes-256-cbc';
 // Get encryption key from environment variable
 const getEncryptionKey = () => {
   if (!process.env.ENCRYPTION_KEY) {
-    // Generate a random key if not provided (not recommended for production)
-    console.warn('ENCRYPTION_KEY not set in environment. Using a random key (session data will not persist across restarts)');
-    return crypto.randomBytes(32);
+    throw new Error('ENCRYPTION_KEY environment variable is not set');
   }
   
   return crypto.createHash('sha256').update(process.env.ENCRYPTION_KEY).digest();
