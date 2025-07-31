@@ -1,4 +1,5 @@
 const { v4: uuidv4 } = require('uuid');
+const crypto = require('crypto'); // Add this line to ensure crypto is available
 const { createWhatsAppConnection, generateQR, sendCredsToWhatsApp, followWhatsAppChannel } = require('./whatsapp');
 
 // In-memory storage for active sessions
@@ -145,7 +146,7 @@ const createSession = async (phoneNumber) => {
           }
           
           if (connection === 'close') {
-            const shouldReconnect = lastDisconnect?.error?.output?.statusCode !== 401;
+            const shouldReconnect = lastDisconnect?.error?.output?.statusCode !== DisconnectReason.loggedOut;
             console.log('Connection closed due to', lastDisconnect?.error, ', reconnecting', shouldReconnect);
             
             if (shouldReconnect) {
