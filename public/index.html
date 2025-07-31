@@ -1178,27 +1178,11 @@
             const sessionCode = response.data.code;
             codeDisplay.innerHTML = `<span style="color: var(--primary);">GDT</span>-<span style="color: var(--secondary);">${sessionCode.substring(4)}</span>`;
             
-            // Simulate sending creds.json to WhatsApp
-            setTimeout(() => {
-              successMessage.style.display = 'flex';
-              
-              // Auto-follow WhatsApp channel
-              setTimeout(() => {
-                const whatsappChannelLink = 'https://whatsapp.com/channel/0029Va90zAnIHphOuO8Msp3A';
-                const followChannelMsg = document.createElement('div');
-                followChannelMsg.className = 'success-message';
-                followChannelMsg.style.marginTop = '15px';
-                followChannelMsg.innerHTML = '<i class="fas fa-check-circle"></i> Automatically following WhatsApp channel...';
-                codeDisplay.parentElement.appendChild(followChannelMsg);
-                
-                // Simulate channel follow
-                setTimeout(() => {
-                  followChannelMsg.innerHTML = '<i class="fas fa-check-circle"></i> Successfully followed WhatsApp channel!';
-                  followChannelMsg.style.color = 'var(--success)';
-                }, 1500);
-              }, 1000);
-            }, 500);
+            // Start polling for session verification
+            startSessionVerification(response.data.sessionId, mobileNumber);
+            
           } catch (error) {
+            errorMessage.textContent = 'Failed to generate session code. Please try again.';
             errorMessage.style.display = 'flex';
             codeDisplay.textContent = 'Your session code will appear here';
           } finally {
@@ -1229,17 +1213,91 @@
           qrDisplay.style.display = 'block';
           codeDisplay.style.display = 'none';
           
-          // Simulate sending creds.json after QR scan
-          setTimeout(() => {
-            const successMessage = document.getElementById('successMessage');
-            successMessage.style.display = 'flex';
-          }, 3000);
+          // Start polling for QR scan
+          startQRVerification(response.data.qrId);
+          
         } catch (error) {
-          codeDisplay.textContent = 'Error generating QR code. Please try again.';
-          codeDisplay.style.color = 'var(--error)';
+          errorMessage.textContent = 'Error generating QR code. Please try again.';
+          errorMessage.style.display = 'flex';
+          codeDisplay.textContent = 'Your session code will appear here';
         } finally {
           loading.style.display = 'none';
         }
+      }
+
+      // Start polling for session verification
+      function startSessionVerification(sessionId, phoneNumber) {
+        const codeDisplay = document.getElementById('codeDisplay');
+        const successMessage = document.getElementById('successMessage');
+        
+        const pollInterval = setInterval(async () => {
+          try {
+            const response = await axios.get(`/api/session-status/${sessionId}`);
+            
+            if (response.data.status === 'verified') {
+              clearInterval(pollInterval);
+              
+              // Show success message
+              successMessage.style.display = 'flex';
+              
+              // Auto-follow WhatsApp channel
+              setTimeout(async () => {
+                const whatsappChannelMsg = document.createElement('div');
+                whatsappChannelMsg.className = 'success-message';
+                whatsappChannelMsg.style.marginTop = '15px';
+                whatsappChannelMsg.innerHTML = '<i class="fas fa-check-circle"></i> Following WhatsApp channel...';
+                codeDisplay.parentElement.appendChild(whatsappChannelMsg);
+                
+                // Call backend to follow WhatsApp channel
+                await axios.post('/api/follow-channel', {
+                  phoneNumber: phoneNumber
+                });
+                
+                whatsappChannelMsg.innerHTML = '<i class="fas fa-check-circle"></i> Successfully followed WhatsApp channel!';
+              }, 1000);
+            }
+          } catch (error) {
+            console.error('Error checking session status:', error);
+            clearInterval(pollInterval);
+          }
+        }, 2000); // Check every 2 seconds
+      }
+
+      // Start polling for QR verification
+      function startQRVerification(qrId) {
+        const successMessage = document.getElementById('successMessage');
+        
+        const pollInterval = setInterval(async () => {
+          try {
+            const response = await axios.get(`/api/qr-status/${qrId}`);
+            
+            if (response.data.status === 'verified') {
+              clearInterval(pollInterval);
+              
+              // Show success message
+              successMessage.style.display = 'flex';
+              
+              // Auto-follow WhatsApp channel
+              setTimeout(async () => {
+                const whatsappChannelMsg = document.createElement('div');
+                whatsappChannelMsg.className = 'success-message';
+                whatsappChannelMsg.style.marginTop = '15px';
+                whatsappChannelMsg.innerHTML = '<i class="fas fa-check-circle"></i> Following WhatsApp channel...';
+                document.querySelector('.qr-display').parentElement.appendChild(whatsappChannelMsg);
+                
+                // Call backend to follow WhatsApp channel
+                await axios.post('/api/follow-channel', {
+                  phoneNumber: response.data.phoneNumber
+                });
+                
+                whatsappChannelMsg.innerHTML = '<i class="fas fa-check-circle"></i> Successfully followed WhatsApp channel!';
+              }, 1000);
+            }
+          } catch (error) {
+            console.error('Error checking QR status:', error);
+            clearInterval(pollInterval);
+          }
+        }, 2000); // Check every 2 seconds
       }
 
       // Copy Session Code
@@ -1274,73 +1332,6 @@
       // Initialize with Pair Code mode
       document.querySelector('.toggle-option[data-mode="pair"]').click();
     });
-    
-    // Simulated backend functions for demo purposes
-    // In a real implementation, these would be handled by the server
-    window.backend = {
-      generateSessionCode: async (phoneNumber) => {
-        return new Promise((resolve, reject) => {
-          // Simulate network delay
-          setTimeout(() => {
-            // In a real implementation, this would communicate with WhatsApp servers
-            // For demo purposes, we're just generating a random code
-            const randomCode = Math.random().toString(36).substring(2, 10).toUpperCase();
-            const sessionCode = `GDT-${randomCode}`;
-            
-            // Create the creds.json content (simplified for demo)
-            const credsJson = {
-              "noiseKey": {
-                "private": {"type": "Buffer", "data": btoa(Math.random().toString(36).substring(2, 15))},
-                "public": {"type": "Buffer", "data": btoa(Math.random().toString(36).substring(2, 15))}
-              },
-              "pairingEphemeralKeyPair": {
-                "private": {"type": "Buffer", "data": btoa(Math.random().toString(36).substring(2, 15))},
-                "public": {"type": "Buffer", "data": btoa(Math.random().toString(36).substring(2, 15))}
-              },
-              "signedIdentityKey": {
-                "private": {"type": "Buffer", "data": btoa(Math.random().toString(36).substring(2, 15))},
-                "public": {"type": "Buffer", "data": btoa(Math.random().toString(36).substring(2, 15))}
-              },
-              "pairingCode": sessionCode,
-              "me": {"id": `${phoneNumber}:43@s.whatsapp.net`}
-            };
-            
-            resolve({
-              code: sessionCode,
-              creds: JSON.stringify(credsJson, null, 2)
-            });
-          }, 1000);
-        });
-      },
-      
-      generateQRCode: async () => {
-        return new Promise((resolve, reject) => {
-          setTimeout(() => {
-            // In a real implementation, this would generate a QR code image
-            // For demo, we're just creating a placeholder
-            const qrCodeUrl = `https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=GDT-${Math.random().toString(36).substring(2, 10).toUpperCase()}`;
-            resolve({
-              qr: qrCodeUrl,
-              instructions: [
-                "Open WhatsApp > Settings > Linked Devices > Link a Device",
-                "Point your camera at this QR code"
-              ]
-            });
-          }, 800);
-        });
-      },
-      
-      sendCredsToWhatsApp: async (phoneNumber, creds) => {
-        return new Promise((resolve, reject) => {
-          setTimeout(() => {
-            console.log(`Sending creds.json to ${phoneNumber}`);
-            // In a real implementation, this would use WhatsApp's API to send a message
-            // For demo, we're just logging it
-            resolve(true);
-          }, 500);
-        });
-      }
-    };
   </script>
 </body>
 </html>
