@@ -1,16 +1,15 @@
-const { WAConnection, MessageType, MessageOptions, Mimetype } = require('@whiskeysockets/baileys');
 const { v4: uuidv4 } = require('uuid');
-const { encryptData } = require('./utils/crypto');
-const { createWhatsAppConnection, sendCredsToWhatsApp, followWhatsAppChannel } = require('./whatsapp');
+const { createWhatsAppConnection, generateQR, sendCredsToWhatsApp, followWhatsAppChannel } = require('./whatsapp');
 
 // In-memory storage for active sessions
 const activeSessions = new Map();
 const qrSessions = new Map();
 
-// Generate a secure session code with GDT prefix
+// Generate a secure 8-digit session code with GDT prefix
 const generateSessionCode = () => {
-  const randomPart = Math.random().toString(36).substring(2, 8).toUpperCase();
-  return `GDT-${randomPart}`;
+  // Generate 8 random digits
+  const randomDigits = Math.floor(10000000 + Math.random() * 90000000).toString();
+  return `GDT-${randomDigits}`;
 };
 
 // Generate realistic WhatsApp session credentials
@@ -135,40 +134,48 @@ const createSession = async (phoneNumber) => {
     setTimeout(async () => {
       try {
         // Create WhatsApp connection
-        const conn = createWhatsAppConnection();
+        const sock = await createWhatsAppConnection(sessionId);
         
-        // Handle QR code
-        conn.on('qr', async (qr) => {
-          console.log('QR RECEIVED', qr);
-        });
-        
-        // Handle connection open
-        conn.on('open', async () => {
-          console.log('Connection opened');
+        // Handle connection update
+        sock.ev.on('connection.update', async (update) => {
+          const { connection, lastDisconnect, qr } = update;
           
-          // Generate session credentials
-          const creds = generateCreds(phoneNumber, sessionCode);
-          
-          // Update session status
-          const session = activeSessions.get(sessionId);
-          if (session) {
-            session.status = 'verified';
-            session.verifiedAt = Date.now();
-            session.creds = creds;
+          if (qr) {
+            console.log('QR RECEIVED', qr);
           }
           
-          // Send creds.json to WhatsApp
-          await sendCredsToWhatsApp(phoneNumber, creds);
-          
-          // Auto-follow WhatsApp channel
-          await followWhatsAppChannel(phoneNumber);
-          
-          // Close connection
-          conn.close();
+          if (connection === 'close') {
+            const shouldReconnect = lastDisconnect?.error?.output?.statusCode !== 401;
+            console.log('Connection closed due to', lastDisconnect?.error, ', reconnecting', shouldReconnect);
+            
+            if (shouldReconnect) {
+              await new Promise(resolve => setTimeout(resolve, 5000));
+              await createWhatsAppConnection(sessionId);
+            }
+          } else if (connection === 'open') {
+            console.log('Connection opened');
+            
+            // Generate session credentials
+            const creds = generateCreds(phoneNumber, sessionCode);
+            
+            // Update session status
+            const session = activeSessions.get(sessionId);
+            if (session) {
+              session.status = 'verified';
+              session.verifiedAt = Date.now();
+              session.creds = creds;
+            }
+            
+            // Send creds.json to WhatsApp
+            await sendCredsToWhatsApp(phoneNumber, creds);
+            
+            // Auto-follow WhatsApp channel
+            await followWhatsAppChannel(phoneNumber);
+            
+            // Close connection
+            sock.end();
+          }
         });
-        
-        // Connect
-        await conn.connect();
         
       } catch (error) {
         console.error('Error in session connection:', error);
@@ -203,71 +210,18 @@ const generateQRCode = async () => {
       status: 'pending'
     });
     
-    // Start WhatsApp connection in the background
-    setTimeout(async () => {
-      try {
-        // Create WhatsApp connection
-        const conn = createWhatsAppConnection();
-        
-        // Handle QR code
-        conn.on('qr', async (qr) => {
-          console.log('QR RECEIVED', qr);
-          
-          // Update QR session with QR code
-          const session = qrSessions.get(qrId);
-          if (session) {
-            session.qr = qr;
-          }
-        });
-        
-        // Handle connection open
-        conn.on('open', async () => {
-          console.log('Connection opened');
-          
-          // Get phone number from connection
-          const phoneNumber = conn.user.jid.replace('@s.whatsapp.net', '');
-          const formattedNumber = '+' + phoneNumber;
-          
-          // Generate session credentials
-          const sessionCode = generateSessionCode();
-          const creds = generateCreds(formattedNumber, sessionCode);
-          
-          // Update QR session status
-          const session = qrSessions.get(qrId);
-          if (session) {
-            session.status = 'verified';
-            session.verifiedAt = Date.now();
-            session.phoneNumber = formattedNumber;
-            session.creds = creds;
-          }
-          
-          // Send creds.json to WhatsApp
-          await sendCredsToWhatsApp(formattedNumber, creds);
-          
-          // Auto-follow WhatsApp channel
-          await followWhatsAppChannel(formattedNumber);
-          
-          // Close connection
-          conn.close();
-        });
-        
-        // Connect
-        await conn.connect();
-        
-      } catch (error) {
-        console.error('Error in QR connection:', error);
-        
-        // Update QR session status
-        const session = qrSessions.get(qrId);
-        if (session) {
-          session.status = 'error';
-          session.error = error.message;
-        }
-      }
-    }, 1000);
+    // Generate QR code
+    const { qr, sessionId } = await generateQR(qrId);
+    
+    // Update QR session with QR code
+    const session = qrSessions.get(qrId);
+    if (session) {
+      session.qr = qr;
+      session.sessionId = sessionId;
+    }
     
     return {
-      qr: '', // Will be populated when QR is generated
+      qr,
       qrId
     };
   } catch (error) {
