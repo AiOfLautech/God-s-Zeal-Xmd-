@@ -217,7 +217,7 @@ function generateCreds(phoneNumber, sessionCode) {
     noiseKey: {
       private: {
         type: "Buffer",
-         Buffer.from(crypto.randomBytes(32)).toString('base64')
+        data: Buffer.from(crypto.randomBytes(32)).toString('base64')
       },
       public: {
         type: "Buffer",
@@ -231,13 +231,13 @@ function generateCreds(phoneNumber, sessionCode) {
       },
       public: {
         type: "Buffer",
-         Buffer.from(crypto.randomBytes(32)).toString('base64')
+        data: Buffer.from(crypto.randomBytes(32)).toString('base64')
       }
     },
     signedIdentityKey: {
       private: {
         type: "Buffer",
-         Buffer.from(crypto.randomBytes(32)).toString('base64')
+        data: Buffer.from(crypto.randomBytes(32)).toString('base64')
       },
       public: {
         type: "Buffer",
@@ -279,7 +279,7 @@ function generateCreds(phoneNumber, sessionCode) {
     registered: true,
     backupToken: {
       type: "Buffer",
-       Buffer.from(crypto.randomBytes(15)).toString('base64')
+      data: Buffer.from(crypto.randomBytes(15)).toString('base64')
     },
     registration: {},
     pairingCode: sessionCode,
