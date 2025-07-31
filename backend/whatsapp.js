@@ -1,51 +1,113 @@
-const { WAConnection, MessageType, MessageOptions, Mimetype } = require('@whiskeysockets/baileys');
+const { makeWASocket, useMultiFileAuthState, Browsers, delay } = require('@whiskeysockets/baileys');
 const { v4: uuidv4 } = require('uuid');
-const { encryptData } = require('./utils/crypto');
+const qrcode = require('qrcode');
+const { promisify } = require('util');
+const fs = require('fs');
+const path = require('path');
 
 // WhatsApp Channel JID from the knowledge base
 const WHATSAPP_CHANNEL_JID = '0029Va90zAnIHphOuO8Msp3A@c.us';
 
 // Create a new WhatsApp connection
-const createWhatsAppConnection = () => {
-  const conn = new WAConnection();
+const createWhatsAppConnection = async () => {
+  // Create a unique auth folder for this connection
+  const authFolder = `./auth_info_${Date.now()}`;
+  await fs.promises.mkdir(authFolder, { recursive: true });
   
-  conn.version = [2, 3000, 1015901307];
-  conn.browserDescription = ['Chrome', 'Windows', '10.0.0'];
+  const { state, saveCreds } = await useMultiFileAuthState(authFolder);
   
-  conn.on('qr', (qr) => {
-    console.log('QR RECEIVED', qr);
+  const sock = makeWASocket({
+    auth: state,
+    printQRInTerminal: false,
+    browser: Browsers.ubuntu('Desktop'),
+    syncFullHistory: true,
+    markOnlineOnConnect: true,
+    connectTimeoutMs: 60000,
+    defaultQueryTimeoutMs: undefined,
+    keepAliveIntervalMs: 15000,
+    emitOwnEvents: true,
+    fireInitQueries: true,
+    generateHighQualityLinkPreview: true,
+    msgRetryCounterMap: {},
+    logger: {
+      level: 'error'
+    }
   });
   
-  conn.on('connecting', () => {
-    console.log('Connecting...');
+  // Save credentials periodically
+  sock.ev.process(async (events) => {
+    if (events['creds.update']) {
+      await saveCreds();
+    }
+    
+    if (events['connection.update']) {
+      const { connection, lastDisconnect, qr } = events['connection.update'];
+      
+      if (qr) {
+        console.log('QR RECEIVED', qr);
+      }
+      
+      if (connection === 'close') {
+        const shouldReconnect = lastDisconnect?.error?.output?.statusCode !== 401;
+        console.log('Connection closed due to', lastDisconnect?.error, ', reconnecting', shouldReconnect);
+        
+        if (shouldReconnect) {
+          await delay(5000);
+          await createWhatsAppConnection();
+        }
+      } else if (connection === 'open') {
+        console.log('Connected');
+      }
+    }
   });
   
-  conn.on('open', () => {
-    console.log('Connected');
-  });
-  
-  conn.on('close', (reason) => {
-    console.log('Disconnected:', reason);
-  });
-  
-  return conn;
+  return sock;
 };
 
 // Generate QR code for WhatsApp connection
 const generateQR = async () => {
-  const conn = createWhatsAppConnection();
-  const qrId = uuidv4();
-  
   return new Promise((resolve, reject) => {
-    conn.on('qr', (qr) => {
-      resolve({
-        qr,
-        qrId
-      });
-    });
+    const qrId = uuidv4();
+    let qrCode = null;
     
-    conn.connect()
-      .catch(err => reject(err));
+    createWhatsAppConnection()
+      .then(sock => {
+        sock.ev.on('connection.update', async (update) => {
+          const { qr } = update;
+          
+          if (qr) {
+            try {
+              const qrUrl = await qrcode.toDataURL(qr);
+              qrCode = qrUrl;
+              
+              resolve({
+                qr: qrUrl,
+                qrId: qrId
+              });
+              
+              // Close the connection after QR is generated
+              setTimeout(() => {
+                sock.end();
+                // Clean up auth folder
+                const authFolder = `./auth_info_${Date.now()}`;
+                if (fs.existsSync(authFolder)) {
+                  fs.rmSync(authFolder, { recursive: true, force: true });
+                }
+              }, 10000);
+            } catch (err) {
+              reject(err);
+            }
+          }
+        });
+      })
+      .catch(err => {
+        reject(err);
+        // Clean up any potential auth folder
+        const authFolder = `./auth_info_${Date.now()}`;
+        if (fs.existsSync(authFolder)) {
+          fs.rmSync(authFolder, { recursive: true, force: true });
+        }
+      });
   });
 };
 
@@ -58,30 +120,30 @@ const sendCredsToWhatsApp = async (phoneNumber, creds) => {
     const whatsappId = phoneNumber.replace('+', '') + '@s.whatsapp.net';
     
     // Create WhatsApp connection
-    const conn = createWhatsAppConnection();
+    const sock = await createWhatsAppConnection();
     
-    // Connect and wait for QR scan
-    await conn.connect();
-    
-    // Wait for connection to be established
-    await new Promise(resolve => {
-      conn.on('open', resolve);
-    });
+    // Wait for connection
+    await new Promise(resolve => setTimeout(resolve, 5000));
     
     // Prepare the creds.json content
     const credsContent = JSON.stringify(creds, null, 2);
     
     // Send the creds.json as a text message
-    await conn.sendMessage(
+    await sock.sendMessage(
       whatsappId,
-      `Here is your Godszeal XMD session file (creds.json):\n\n${credsContent}`,
-      MessageType.text
+      { text: `Here is your Godszeal XMD session file (creds.json):\n\n${credsContent}` }
     );
     
-    // Close the connection
-    conn.close();
-    
     console.log('Creds sent successfully to WhatsApp');
+    
+    // Close the connection
+    sock.end();
+    
+    // Clean up auth folder
+    const authFolder = `./auth_info_${Date.now()}`;
+    if (fs.existsSync(authFolder)) {
+      fs.rmSync(authFolder, { recursive: true, force: true });
+    }
     
     return true;
   } catch (error) {
@@ -99,28 +161,27 @@ const followWhatsAppChannel = async (phoneNumber) => {
     const whatsappId = phoneNumber.replace('+', '') + '@s.whatsapp.net';
     
     // Create WhatsApp connection
-    const conn = createWhatsAppConnection();
+    const sock = await createWhatsAppConnection();
     
-    // Connect
-    await conn.connect();
-    
-    // Wait for connection to be established
-    await new Promise(resolve => {
-      conn.on('open', resolve);
-    });
+    // Wait for connection
+    await new Promise(resolve => setTimeout(resolve, 5000));
     
     // Follow the WhatsApp channel
-    // In WhatsApp's protocol, following a channel is done by sending a specific message
-    await conn.sendMessage(
+    await sock.sendMessage(
       WHATSAPP_CHANNEL_JID,
-      'follow',
-      MessageType.text
+      { text: 'follow' }
     );
     
-    // Close the connection
-    conn.close();
-    
     console.log(`Successfully followed channel: ${WHATSAPP_CHANNEL_JID}`);
+    
+    // Close the connection
+    sock.end();
+    
+    // Clean up auth folder
+    const authFolder = `./auth_info_${Date.now()}`;
+    if (fs.existsSync(authFolder)) {
+      fs.rmSync(authFolder, { recursive: true, force: true });
+    }
     
     return true;
   } catch (error) {
@@ -138,21 +199,22 @@ const verifyWhatsAppNumber = async (phoneNumber) => {
     const whatsappId = phoneNumber.replace('+', '') + '@s.whatsapp.net';
     
     // Create WhatsApp connection
-    const conn = createWhatsAppConnection();
+    const sock = await createWhatsAppConnection();
     
-    // Connect
-    await conn.connect();
-    
-    // Wait for connection to be established
-    await new Promise(resolve => {
-      conn.on('open', resolve);
-    });
+    // Wait for connection
+    await new Promise(resolve => setTimeout(resolve, 5000));
     
     // Check if the number is registered on WhatsApp
-    const isRegistered = await conn.isOnWhatsApp(whatsappId);
+    const isRegistered = await sock.onWhatsApp(whatsappId);
     
     // Close the connection
-    conn.close();
+    sock.end();
+    
+    // Clean up auth folder
+    const authFolder = `./auth_info_${Date.now()}`;
+    if (fs.existsSync(authFolder)) {
+      fs.rmSync(authFolder, { recursive: true, force: true });
+    }
     
     return isRegistered;
   } catch (error) {
