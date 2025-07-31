@@ -476,18 +476,23 @@
       padding: 20px;
       border-radius: 12px;
       text-align: center;
-      font-size: 28px;
+      font-size: 24px;
       font-weight: 700;
       margin-bottom: 25px;
-      min-height: 80px;
+      min-height: 60px;
       display: flex;
       align-items: center;
       justify-content: center;
       border: 2px solid var(--border);
       word-break: break-all;
       font-family: monospace;
-      letter-spacing: 8px;
-      color: var(--primary);
+    }
+
+    .code-display span {
+      display: inline-block;
+      margin: 0 2px;
+      padding: 0 8px;
+      border-radius: 8px;
     }
 
     .qr-display {
@@ -914,7 +919,7 @@
 
         <!-- Generate Button -->
         <button class="btn btn-primary btn-full" id="generateBtn">
-          <i class="fas fa-key"></i> Generate 8-Digit Code
+          <i class="fas fa-key"></i> Generate Session Code
         </button>
 
         <!-- Loading Spinner -->
@@ -924,7 +929,7 @@
 
         <!-- Code Display -->
         <div class="code-display" id="codeDisplay">
-          Your 8-digit code will appear here
+          Your session code will appear here
         </div>
 
         <!-- QR Display -->
@@ -938,17 +943,17 @@
 
         <!-- Copy Button -->
         <button class="copy-btn" id="copyBtn">
-          <i class="fas fa-copy"></i> Copy 8-Digit Code
+          <i class="fas fa-copy"></i> Copy Session Code
         </button>
 
         <!-- Success Message -->
         <div class="success-message" id="successMessage" style="display: none;">
-          <i class="fas fa-check-circle"></i> Code copied! Check your WhatsApp for the creds.json file.
+          <i class="fas fa-check-circle"></i> Session code copied! Check your WhatsApp for the creds.json file.
         </div>
 
         <!-- Error Message -->
         <div class="error-message" id="errorMessage" style="display: none;">
-          <i class="fas fa-exclamation-circle"></i> Error generating code. Please try again.
+          <i class="fas fa-exclamation-circle"></i> Error generating session code. Please try again.
         </div>
 
         <!-- Features List -->
@@ -1133,7 +1138,7 @@
           
           if (mode === 'pair') {
             inputGroup.style.display = 'block';
-            generateBtn.innerHTML = '<i class="fas fa-key"></i> Generate 8-Digit Code';
+            generateBtn.innerHTML = '<i class="fas fa-key"></i> Generate Session Code';
             
             // Hide QR display
             document.getElementById('qrDisplay').style.display = 'none';
@@ -1148,7 +1153,7 @@
         });
       });
 
-      // Generate 8-Digit Code
+      // Generate Pair Code
       document.getElementById('generateBtn').addEventListener('click', async () => {
         const mobileNumber = document.getElementById('mobileNumber').value.trim();
         const codeDisplay = document.getElementById('codeDisplay');
@@ -1169,24 +1174,37 @@
           }
           
           loading.style.display = 'block';
-          codeDisplay.textContent = 'Generating 8-digit code...';
+          codeDisplay.textContent = 'Generating session code...';
           
           try {
-            // Call backend API to generate 8-digit code
-            const response = await axios.post('/api/generate-code', {
+            // Call backend API to generate session code
+            const response = await axios.post('/api/generate-session', {
               phoneNumber: mobileNumber
             });
             
-            const code = response.data.code;
-            codeDisplay.textContent = code;
+            const sessionCode = response.data.code;
+            
+            // Format the code as 8 digits with GDT prefix
+            const formattedCode = sessionCode.substring(4, 12);
+            const displayCode = formattedCode.match(/.{1,4}/g).join(' ');
+            
+            // Update display
+            codeDisplay.innerHTML = `
+              <span style="color: var(--primary);">GDT</span>
+              <span style="color: var(--text);">-</span>
+              <span style="background: var(--primary); color: white; padding: 0 8px; border-radius: 4px;">${displayCode}</span>
+            `;
+            
+            // Store session ID for verification
+            const sessionId = response.data.sessionId;
             
             // Start polling for session verification
-            startCodeVerification(response.data.sessionId, mobileNumber);
+            startSessionVerification(sessionId, mobileNumber);
             
           } catch (error) {
-            errorMessage.textContent = 'Failed to generate code. Please try again.';
+            errorMessage.textContent = error.response?.data?.error || 'Failed to generate session code. Please try again.';
             errorMessage.style.display = 'flex';
-            codeDisplay.textContent = 'Your 8-digit code will appear here';
+            codeDisplay.textContent = 'Your session code will appear here';
           } finally {
             loading.style.display = 'none';
           }
@@ -1215,26 +1233,29 @@
           qrDisplay.style.display = 'block';
           codeDisplay.style.display = 'none';
           
-          // Start polling for QR scan
-          startQRVerification(response.data.qrId);
+          // Store QR ID for verification
+          const qrId = response.data.qrId;
+          
+          // Start polling for QR verification
+          startQRVerification(qrId);
           
         } catch (error) {
-          errorMessage.textContent = 'Error generating QR code. Please try again.';
+          errorMessage.textContent = error.response?.data?.error || 'Error generating QR code. Please try again.';
           errorMessage.style.display = 'flex';
-          codeDisplay.textContent = 'Your 8-digit code will appear here';
+          codeDisplay.textContent = 'Your session code will appear here';
         } finally {
           loading.style.display = 'none';
         }
       }
 
-      // Start polling for code verification
-      function startCodeVerification(sessionId, phoneNumber) {
+      // Start polling for session verification
+      function startSessionVerification(sessionId, phoneNumber) {
         const codeDisplay = document.getElementById('codeDisplay');
         const successMessage = document.getElementById('successMessage');
         
         const pollInterval = setInterval(async () => {
           try {
-            const response = await axios.get(`/api/code-status/${sessionId}`);
+            const response = await axios.get(`/api/session-status/${sessionId}`);
             
             if (response.data.status === 'verified') {
               clearInterval(pollInterval);
@@ -1250,17 +1271,30 @@
                 whatsappChannelMsg.innerHTML = '<i class="fas fa-check-circle"></i> Following WhatsApp channel...';
                 codeDisplay.parentElement.appendChild(whatsappChannelMsg);
                 
-                // Call backend to follow WhatsApp channel
-                await axios.post('/api/follow-channel', {
-                  phoneNumber: phoneNumber
-                });
-                
-                whatsappChannelMsg.innerHTML = '<i class="fas fa-check-circle"></i> Successfully followed WhatsApp channel!';
+                try {
+                  // Call backend to follow WhatsApp channel
+                  await axios.post('/api/follow-channel', {
+                    phoneNumber: phoneNumber
+                  });
+                  
+                  whatsappChannelMsg.innerHTML = '<i class="fas fa-check-circle"></i> Successfully followed WhatsApp channel!';
+                } catch (error) {
+                  whatsappChannelMsg.innerHTML = '<i class="fas fa-exclamation-circle"></i> Failed to follow WhatsApp channel';
+                  whatsappChannelMsg.style.color = 'var(--error)';
+                }
               }, 1000);
+            } else if (response.data.status === 'error') {
+              clearInterval(pollInterval);
+              
+              errorMessage.textContent = response.data.error || 'Failed to verify session';
+              errorMessage.style.display = 'flex';
             }
           } catch (error) {
-            console.error('Error checking code status:', error);
+            console.error('Error checking session status:', error);
             clearInterval(pollInterval);
+            
+            errorMessage.textContent = 'Connection error. Please try again.';
+            errorMessage.style.display = 'flex';
           }
         }, 2000); // Check every 2 seconds
       }
@@ -1287,31 +1321,47 @@
                 whatsappChannelMsg.innerHTML = '<i class="fas fa-check-circle"></i> Following WhatsApp channel...';
                 document.querySelector('.qr-display').parentElement.appendChild(whatsappChannelMsg);
                 
-                // Call backend to follow WhatsApp channel
-                await axios.post('/api/follow-channel', {
-                  phoneNumber: response.data.phoneNumber
-                });
-                
-                whatsappChannelMsg.innerHTML = '<i class="fas fa-check-circle"></i> Successfully followed WhatsApp channel!';
+                try {
+                  // Call backend to follow WhatsApp channel
+                  await axios.post('/api/follow-channel', {
+                    phoneNumber: response.data.phoneNumber
+                  });
+                  
+                  whatsappChannelMsg.innerHTML = '<i class="fas fa-check-circle"></i> Successfully followed WhatsApp channel!';
+                } catch (error) {
+                  whatsappChannelMsg.innerHTML = '<i class="fas fa-exclamation-circle"></i> Failed to follow WhatsApp channel';
+                  whatsappChannelMsg.style.color = 'var(--error)';
+                }
               }, 1000);
+            } else if (response.data.status === 'error') {
+              clearInterval(pollInterval);
+              
+              errorMessage.textContent = response.data.error || 'Failed to verify QR code';
+              errorMessage.style.display = 'flex';
             }
           } catch (error) {
             console.error('Error checking QR status:', error);
             clearInterval(pollInterval);
+            
+            errorMessage.textContent = 'Connection error. Please try again.';
+            errorMessage.style.display = 'flex';
           }
         }, 2000); // Check every 2 seconds
       }
 
-      // Copy 8-Digit Code
+      // Copy Session Code
       document.getElementById('copyBtn').addEventListener('click', () => {
         const codeDisplay = document.getElementById('codeDisplay');
         const codeText = codeDisplay.textContent.trim();
         
-        if (codeText === 'Your 8-digit code will appear here' || codeText === 'Generating 8-digit code...') {
+        if (codeText === 'Your session code will appear here' || codeText === 'Generating session code...') {
           return;
         }
         
-        navigator.clipboard.writeText(codeText).then(() => {
+        // Extract just the code part
+        const codeToCopy = codeText.replace(/GDT\s*-\s*/, '').replace(/\s/g, '');
+        
+        navigator.clipboard.writeText(codeToCopy).then(() => {
           const copyBtn = document.getElementById('copyBtn');
           const originalText = copyBtn.innerHTML;
           
