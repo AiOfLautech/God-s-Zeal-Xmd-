@@ -1,8 +1,7 @@
-const { makeWASocket, useMultiFileAuthState, DisconnectReason, Browsers } = require('@whiskeysockets/baileys');
+const { makeWASocket, useMultiFileAuthState, DisconnectReason, Browsers, proto } = require('@whiskeysockets/baileys');
 const { v4: uuidv4 } = require('uuid');
 const qrcode = require('qrcode');
-const { BufferJSON } = require('@whiskeysockets/baileys/lib/Types/ProtoBuf');
-const { proto } = require('@whiskeysockets/baileys');
+const crypto = require('crypto'); // Add this line to ensure crypto is available
 
 // WhatsApp Channel JID from the knowledge base
 const WHATSAPP_CHANNEL_JID = '0029Va90zAnIHphOuO8Msp3A@c.us';
@@ -23,31 +22,25 @@ const createWhatsAppConnection = async (sessionId = uuidv4()) => {
   });
   
   // Handle events
-  sock.ev.process(async (events) => {
-    // Save credentials when they update
-    if (events['creds.update']) {
-      await saveCreds();
+  sock.ev.on('creds.update', saveCreds);
+  
+  sock.ev.on('connection.update', async (update) => {
+    const { connection, lastDisconnect, qr } = update;
+    
+    if (qr) {
+      console.log('QR RECEIVED', qr);
     }
     
-    // Handle connection updates
-    if (events['connection.update']) {
-      const { connection, lastDisconnect, qr } = events['connection.update'];
+    if (connection === 'close') {
+      const shouldReconnect = lastDisconnect?.error?.output?.statusCode !== DisconnectReason.loggedOut;
+      console.log('Connection closed due to', lastDisconnect?.error, ', reconnecting', shouldReconnect);
       
-      if (qr) {
-        console.log('QR RECEIVED', qr);
+      if (shouldReconnect) {
+        await new Promise(resolve => setTimeout(resolve, 5000));
+        createWhatsAppConnection(sessionId);
       }
-      
-      if (connection === 'close') {
-        const shouldReconnect = lastDisconnect?.error?.output?.statusCode !== DisconnectReason.loggedOut;
-        console.log('Connection closed due to', lastDisconnect?.error, ', reconnecting', shouldReconnect);
-        
-        if (shouldReconnect) {
-          await new Promise(resolve => setTimeout(resolve, 5000));
-          createWhatsAppConnection(sessionId);
-        }
-      } else if (connection === 'open') {
-        console.log('Connected');
-      }
+    } else if (connection === 'open') {
+      console.log('Connected');
     }
   });
   
