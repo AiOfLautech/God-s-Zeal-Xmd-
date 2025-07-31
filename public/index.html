@@ -6,7 +6,7 @@
   <title>Godszeal XMD - Session Generator</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.0.0-alpha.1/axios.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.7.7/axios.min.js"></script>
   <style>
     :root {
       --primary: #00ccff;
@@ -476,16 +476,18 @@
       padding: 20px;
       border-radius: 12px;
       text-align: center;
-      font-size: 18px;
-      font-weight: 600;
+      font-size: 28px;
+      font-weight: 700;
       margin-bottom: 25px;
-      min-height: 60px;
+      min-height: 80px;
       display: flex;
       align-items: center;
       justify-content: center;
       border: 2px solid var(--border);
       word-break: break-all;
       font-family: monospace;
+      letter-spacing: 8px;
+      color: var(--primary);
     }
 
     .qr-display {
@@ -912,7 +914,7 @@
 
         <!-- Generate Button -->
         <button class="btn btn-primary btn-full" id="generateBtn">
-          <i class="fas fa-key"></i> Generate Session Code
+          <i class="fas fa-key"></i> Generate 8-Digit Code
         </button>
 
         <!-- Loading Spinner -->
@@ -922,7 +924,7 @@
 
         <!-- Code Display -->
         <div class="code-display" id="codeDisplay">
-          Your session code will appear here
+          Your 8-digit code will appear here
         </div>
 
         <!-- QR Display -->
@@ -936,17 +938,17 @@
 
         <!-- Copy Button -->
         <button class="copy-btn" id="copyBtn">
-          <i class="fas fa-copy"></i> Copy Session Code
+          <i class="fas fa-copy"></i> Copy 8-Digit Code
         </button>
 
         <!-- Success Message -->
         <div class="success-message" id="successMessage" style="display: none;">
-          <i class="fas fa-check-circle"></i> Session code copied! Check your WhatsApp for the creds.json file.
+          <i class="fas fa-check-circle"></i> Code copied! Check your WhatsApp for the creds.json file.
         </div>
 
         <!-- Error Message -->
         <div class="error-message" id="errorMessage" style="display: none;">
-          <i class="fas fa-exclamation-circle"></i> Error generating session code. Please try again.
+          <i class="fas fa-exclamation-circle"></i> Error generating code. Please try again.
         </div>
 
         <!-- Features List -->
@@ -1131,7 +1133,7 @@
           
           if (mode === 'pair') {
             inputGroup.style.display = 'block';
-            generateBtn.innerHTML = '<i class="fas fa-key"></i> Generate Session Code';
+            generateBtn.innerHTML = '<i class="fas fa-key"></i> Generate 8-Digit Code';
             
             // Hide QR display
             document.getElementById('qrDisplay').style.display = 'none';
@@ -1146,7 +1148,7 @@
         });
       });
 
-      // Generate Pair Code
+      // Generate 8-Digit Code
       document.getElementById('generateBtn').addEventListener('click', async () => {
         const mobileNumber = document.getElementById('mobileNumber').value.trim();
         const codeDisplay = document.getElementById('codeDisplay');
@@ -1167,24 +1169,24 @@
           }
           
           loading.style.display = 'block';
-          codeDisplay.textContent = 'Generating session code...';
+          codeDisplay.textContent = 'Generating 8-digit code...';
           
           try {
-            // Call backend API to generate session code
-            const response = await axios.post('/api/generate-session', {
+            // Call backend API to generate 8-digit code
+            const response = await axios.post('/api/generate-code', {
               phoneNumber: mobileNumber
             });
             
-            const sessionCode = response.data.code;
-            codeDisplay.innerHTML = `<span style="color: var(--primary);">GDT</span>-<span style="color: var(--secondary);">${sessionCode.substring(4)}</span>`;
+            const code = response.data.code;
+            codeDisplay.textContent = code;
             
             // Start polling for session verification
-            startSessionVerification(response.data.sessionId, mobileNumber);
+            startCodeVerification(response.data.sessionId, mobileNumber);
             
           } catch (error) {
-            errorMessage.textContent = 'Failed to generate session code. Please try again.';
+            errorMessage.textContent = 'Failed to generate code. Please try again.';
             errorMessage.style.display = 'flex';
-            codeDisplay.textContent = 'Your session code will appear here';
+            codeDisplay.textContent = 'Your 8-digit code will appear here';
           } finally {
             loading.style.display = 'none';
           }
@@ -1219,20 +1221,20 @@
         } catch (error) {
           errorMessage.textContent = 'Error generating QR code. Please try again.';
           errorMessage.style.display = 'flex';
-          codeDisplay.textContent = 'Your session code will appear here';
+          codeDisplay.textContent = 'Your 8-digit code will appear here';
         } finally {
           loading.style.display = 'none';
         }
       }
 
-      // Start polling for session verification
-      function startSessionVerification(sessionId, phoneNumber) {
+      // Start polling for code verification
+      function startCodeVerification(sessionId, phoneNumber) {
         const codeDisplay = document.getElementById('codeDisplay');
         const successMessage = document.getElementById('successMessage');
         
         const pollInterval = setInterval(async () => {
           try {
-            const response = await axios.get(`/api/session-status/${sessionId}`);
+            const response = await axios.get(`/api/code-status/${sessionId}`);
             
             if (response.data.status === 'verified') {
               clearInterval(pollInterval);
@@ -1257,7 +1259,7 @@
               }, 1000);
             }
           } catch (error) {
-            console.error('Error checking session status:', error);
+            console.error('Error checking code status:', error);
             clearInterval(pollInterval);
           }
         }, 2000); // Check every 2 seconds
@@ -1300,12 +1302,12 @@
         }, 2000); // Check every 2 seconds
       }
 
-      // Copy Session Code
+      // Copy 8-Digit Code
       document.getElementById('copyBtn').addEventListener('click', () => {
         const codeDisplay = document.getElementById('codeDisplay');
         const codeText = codeDisplay.textContent.trim();
         
-        if (codeText === 'Your session code will appear here' || codeText === 'Generating session code...') {
+        if (codeText === 'Your 8-digit code will appear here' || codeText === 'Generating 8-digit code...') {
           return;
         }
         
