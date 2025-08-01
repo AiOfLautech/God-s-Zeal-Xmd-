@@ -7,7 +7,7 @@ const { initWA } = require('./utils/whatsapp');
 const app = express();
 initWA();
 app.use(express.json());
-app.use('/', express.static(path.join(__dirname, '../frontend')));
+app.use('/', express.static(path.join(__dirname, './frontend')));
 app.use('/api/pair', pairing);
 app.use('/api/qr', qr);
 const PORT = process.env.PORT||3000;
