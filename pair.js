@@ -81,8 +81,8 @@ router.get('/', async (req, res) => {
 
                         // Send video thumbnail with caption
                         await KnightBot.sendMessage(userJid, {
-                            image: { url: 'https://img.youtube.com/vi/-oz_u1iMgf8/maxresdefault.jpg' },
-                            caption: `🎬 *KnightBot MD V2.0 Full Setup Guide!*\n\n🚀 Bug Fixes + New Commands + Fast AI Chat\n📺 Watch Now: https://youtu.be/-oz_u1iMgf8`
+                            image: { url: '' },
+                            caption: `🎬 *𝐆𝐎𝐃'𝐒 𝐙𝐄𝐀𝐋 𝐗𝐌𝐃 V2.0 Full Setup Guide!*\n\n🚀 Bug Fixes + New Commands + Fast AI Chat\n📺 Watch Now`
                         });
                         console.log("🎬 Video guide sent successfully");
 
@@ -91,7 +91,7 @@ router.get('/', async (req, res) => {
                             text: `⚠️Do not share this file with anybody⚠️\n 
 ┌┤✑  Thanks for using Knight Bot
 │└────────────┈ ⳹        
-│©2024 Mr Unique Hacker 
+│©2025 𝐆𝐎𝐃'𝐒 𝐙𝐄𝐀𝐋 TECH 
 └─────────────────┈ ⳹\n\n`
                         });
                         console.log("⚠️ Warning message sent successfully");
