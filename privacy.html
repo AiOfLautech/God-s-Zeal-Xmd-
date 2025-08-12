@@ -1,0 +1,727 @@
+<!DOCTYPE html>
+<html lang="en" class="light-mode">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>God's Zeal † Xmd - Privacy Policy</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Montserrat:wght@700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            /* Light Mode Variables */
+            --primary: #6c5ce7;
+            --primary-dark: #5649c0;
+            --secondary: #00cec9;
+            --accent: #fd79a8;
+            --background: #ffffff;
+            --card-bg: #f8f9fa;
+            --text: #2d3436;
+            --text-secondary: #636e72;
+            --border: #e9ecef;
+            --success: #00b894;
+            --warning: #fdcb6e;
+            --danger: #ff7675;
+            --shadow: rgba(0, 0, 0, 0.08);
+            --transition: all 0.3s ease;
+        }
+
+        .dark-mode {
+            --primary: #7c6fe1;
+            --primary-dark: #6a5bc7;
+            --secondary: #00d3d0;
+            --accent: #ff85b7;
+            --background: #121212;
+            --card-bg: #1e1e1e;
+            --text: #f5f5f5;
+            --text-secondary: #b0b0b0;
+            --border: #2d2d2d;
+            --shadow: rgba(0, 0, 0, 0.2);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--background);
+            color: var(--text);
+            line-height: 1.6;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        /* Header & Navigation */
+        header {
+            padding: 1.5rem 0;
+            background-color: var(--background);
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            text-decoration: none;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 900;
+            font-size: 1.8rem;
+            color: var(--primary);
+        }
+
+        .logo span {
+            color: var(--secondary);
+        }
+
+        .logo i {
+            font-size: 2.2rem;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            color: var(--text);
+            text-decoration: none;
+            font-weight: 500;
+            position: relative;
+            transition: var(--transition);
+            font-size: 1.05rem;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -4px;
+            left: 0;
+            background-color: var(--primary);
+            transition: var(--transition);
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .nav-actions {
+            display: flex;
+            align-items: center;
+            gap: 1.2rem;
+        }
+
+        .theme-toggle {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            width: 48px;
+            height: 28px;
+            border-radius: 15px;
+            position: relative;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            padding: 0 4px;
+            transition: var(--transition);
+        }
+
+        .theme-toggle-ball {
+            width: 20px;
+            height: 20px;
+            background: var(--primary);
+            border-radius: 50%;
+            position: absolute;
+            left: 4px;
+            transition: var(--transition);
+        }
+
+        .dark-mode .theme-toggle-ball {
+            left: calc(100% - 24px);
+        }
+
+        /* Privacy Policy Section */
+        .section {
+            padding: 6rem 0;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .section-title {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 2.8rem;
+            margin-bottom: 1.2rem;
+            position: relative;
+            display: inline-block;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            width: 60%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            bottom: -10px;
+            left: 20%;
+            border-radius: 2px;
+        }
+
+        .section-subtitle {
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+            max-width: 700px;
+            margin: 0 auto 0;
+        }
+
+        .privacy-content {
+            max-width: 850px;
+            margin: 0 auto;
+        }
+
+        .privacy-intro {
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 2.5rem;
+            box-shadow: 0 5px 15px var(--shadow);
+            border: 1px solid var(--border);
+            margin-bottom: 3rem;
+        }
+
+        .privacy-intro p {
+            font-size: 1.1rem;
+            line-height: 1.7;
+            color: var(--text-secondary);
+        }
+
+        .last-updated {
+            text-align: right;
+            color: var(--text-secondary);
+            font-style: italic;
+            margin-top: 1rem;
+            font-size: 0.9rem;
+        }
+
+        .policy-section {
+            margin-bottom: 2.5rem;
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 2rem;
+            box-shadow: 0 5px 15px var(--shadow);
+            border: 1px solid var(--border);
+            transition: var(--transition);
+        }
+
+        .policy-section:hover {
+            border-color: var(--primary);
+            transform: translateY(-5px);
+        }
+
+        .section-number {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 30px;
+            height: 30px;
+            background: var(--primary);
+            color: white;
+            border-radius: 50%;
+            font-weight: 600;
+            margin-right: 10px;
+        }
+
+        .section-title-large {
+            font-size: 1.6rem;
+            margin-bottom: 1.2rem;
+            display: flex;
+            align-items: center;
+        }
+
+        .section-content h3 {
+            font-size: 1.3rem;
+            margin: 1.2rem 0 0.8rem;
+            color: var(--primary);
+        }
+
+        .section-content p {
+            margin-bottom: 1rem;
+            line-height: 1.7;
+        }
+
+        .highlight-box {
+            background: rgba(108, 92, 231, 0.08);
+            border-left: 4px solid var(--primary);
+            padding: 1.2rem;
+            border-radius: 0 8px 8px 0;
+            margin: 1.5rem 0;
+        }
+
+        .contact-cta {
+            text-align: center;
+            margin-top: 3rem;
+        }
+
+        .contact-button {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            border: none;
+            padding: 0.9rem 2rem;
+            border-radius: 30px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 1.05rem;
+        }
+
+        .contact-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Footer */
+        footer {
+            background: var(--card-bg);
+            padding: 4rem 0 2rem;
+            border-top: 1px solid var(--border);
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .footer-column h3 {
+            font-size: 1.4rem;
+            margin-bottom: 1.5rem;
+            position: relative;
+            padding-bottom: 0.8rem;
+        }
+
+        .footer-column h3::after {
+            content: '';
+            position: absolute;
+            width: 40px;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            bottom: 0;
+            left: 0;
+            border-radius: 2px;
+        }
+
+        .footer-links {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 0.8rem;
+        }
+
+        .footer-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+        }
+
+        .footer-links a:hover {
+            color: var(--primary);
+            transform: translateX(3px);
+        }
+
+        .social-links {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .social-link {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text);
+            transition: var(--transition);
+            text-decoration: none;
+        }
+
+        .social-link:hover {
+            background: var(--primary);
+            color: white;
+            transform: translateY(-3px);
+            border-color: var(--primary);
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 2rem;
+            border-top: 1px solid var(--border);
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+
+        .footer-bottom a {
+            color: var(--primary);
+            text-decoration: none;
+        }
+
+        /* Toast Notifications */
+        .toast-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .toast {
+            padding: 15px 25px;
+            border-radius: 10px;
+            color: white;
+            font-weight: 500;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            animation: slideIn 0.3s ease, fadeOut 0.3s ease 2.7s forwards;
+            transform: translateX(100%);
+        }
+
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        @keyframes fadeOut {
+            from { opacity: 1; }
+            to { opacity: 0; transform: translateX(100%); }
+        }
+
+        .toast-success {
+            background: var(--success);
+        }
+
+        .toast-error {
+            background: var(--danger);
+        }
+
+        .toast-info {
+            background: var(--primary);
+        }
+
+        @media (max-width: 768px) {
+            .section {
+                padding: 4rem 0;
+            }
+            
+            .section-title {
+                font-size: 2.2rem;
+            }
+            
+            .privacy-intro, .policy-section {
+                padding: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <nav>
+                <a href="index.html" class="logo">
+                    <i class="fas fa-infinity"></i>
+                    God's <span>Zeal † Xmd</span>
+                </a>
+                <div class="nav-links">
+                    <a href="index.html#features">Features</a>
+                    <a href="index.html#how-it-works">How It Works</a>
+                    <a href="index.html#testimonials">Success Stories</a>
+                    <a href="ai.html">AI Assistant</a>
+                </div>
+                <div class="nav-actions">
+                    <div class="theme-toggle" id="themeToggle">
+                        <div class="theme-toggle-ball"></div>
+                    </div>
+                    <a href="pair.html" class="contact-button">
+                        <i class="fas fa-rocket"></i> Get Started
+                    </a>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Privacy Policy Section -->
+    <section class="section">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Privacy Policy</h2>
+                <p class="section-subtitle">Last updated:August 15, 2025</p>
+            </div>
+            
+            <div class="privacy-content">
+                <div class="privacy-intro">
+                    <p>At God's Zeal † Xmd, we respect your privacy and are committed to protecting your personal data. This privacy policy will inform you about how we look after your personal data when you visit our website and tell you about your privacy rights and how the law protects you.</p>
+                    <div class="last-updated">Effective Date: August 15, 2025</div>
+                </div>
+                
+                <div class="policy-section">
+                    <h2 class="section-title-large"><span class="section-number">1</span> Introduction</h2>
+                    <div class="section-content">
+                        <p>Welcome to God's Zeal † Xmd ("we", "us", "our"). We are committed to protecting and respecting your privacy. This policy sets out the basis on which any personal data we collect from you, or that you provide to us, will be processed by us.</p>
+                        
+                        <p>God's Zeal † Xmd is a WhatsApp automation platform that helps businesses and individuals streamline their communication. Our services include pair code generation, QR code scanning, and AI-powered automation features.</p>
+                        
+                        <div class="highlight-box">
+                            <p><strong>Key Principle:</strong> We never store your WhatsApp session data or personal messages. All session information is temporary and automatically deleted after the connection process is complete.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="policy-section">
+                    <h2 class="section-title-large"><span class="section-number">2</span> Information We Collect</h2>
+                    <div class="section-content">
+                        <p>We collect several different types of information from and about users of our website, including:</p>
+                        
+                        <h3>Personal Information You Provide to Us</h3>
+                        <p>When you register for an account or use certain features of our service, we may collect:</p>
+                        <ul style="padding-left: 20px; margin: 1rem 0;">
+                            <li style="margin-bottom: 0.5rem;">Contact information (name, email address, phone number)</li>
+                            <li style="margin-bottom: 0.5rem;">WhatsApp account information (phone number)</li>
+                            <li style="margin-bottom: 0.5rem;">Payment information (when applicable)</li>
+                            <li>Any other information you choose to provide</li>
+                        </ul>
+                        
+                        <h3>Information We Collect Through Automatic Data Collection Technologies</h3>
+                        <p>As you navigate through and interact with our website, we may use automatic data collection technologies to collect certain information about your equipment, browsing actions, and patterns, including:</p>
+                        <ul style="padding-left: 20px; margin: 1rem 0;">
+                            <li style="margin-bottom: 0.5rem;">Details of your visits to our website, including traffic data, location data, logs, and other communication data</li>
+                            <li style="margin-bottom: 0.5rem;">Information about your computer and internet connection, including your IP address, operating system, and browser type</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="policy-section">
+                    <h2 class="section-title-large"><span class="section-number">3</span> How We Use Your Information</h2>
+                    <div class="section-content">
+                        <p>We use information held about you in the following ways:</p>
+                        
+                        <ul style="padding-left: 20px; margin: 1rem 0;">
+                            <li style="margin-bottom: 0.8rem;"><strong>To provide our services:</strong> We use your information to create and manage your account, provide customer support, and deliver our WhatsApp automation services.</li>
+                            <li style="margin-bottom: 0.8rem;"><strong>To improve our services:</strong> We analyze how users interact with our platform to identify areas for improvement and new feature development.</li>
+                            <li style="margin-bottom: 0.8rem;"><strong>To communicate with you:</strong> We may send you service-related communications, including updates, security alerts, and support messages.</li>
+                            <li style="margin-bottom: 0.8rem;"><strong>To comply with legal obligations:</strong> We may process your information to comply with applicable laws and regulations.</li>
+                        </ul>
+                        
+                        <div class="highlight-box">
+                            <p><strong>Important Note:</strong> We never access, store, or share your WhatsApp messages or personal conversations. Our service only handles the connection process and automation features you explicitly configure.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="policy-section">
+                    <h2 class="section-title-large"><span class="section-number">4</span> Data Security</h2>
+                    <div class="section-content">
+                        <p>We have implemented appropriate security measures to prevent your personal data from being accidentally lost, used, or accessed in an unauthorized way, altered, or disclosed.</p>
+                        
+                        <h3>Security Measures Include:</h3>
+                        <ul style="padding-left: 20px; margin: 1rem 0;">
+                            <li style="margin-bottom: 0.5rem;">Encryption of data in transit using TLS/SSL</li>
+                            <li style="margin-bottom: 0.5rem;">Regular security assessments and penetration testing</li>
+                            <li style="margin-bottom: 0.5rem;">Secure storage of sensitive information</li>
+                            <li style="margin-bottom: 0.5rem;">Access controls limiting data access to authorized personnel only</li>
+                            <li>Regular security training for our staff</li>
+                        </ul>
+                        
+                        <p>However, the transmission of information via the internet is not completely secure. Although we will do our best to protect your personal data, we cannot guarantee the security of your data transmitted to our website.</p>
+                    </div>
+                </div>
+                
+                <div class="policy-section">
+                    <h2 class="section-title-large"><span class="section-number">5</span> Your Legal Rights</h2>
+                    <div class="section-content">
+                        <p>Under certain circumstances, you have rights under data protection laws in relation to your personal data:</p>
+                        
+                        <ul style="padding-left: 20px; margin: 1rem 0;">
+                            <li style="margin-bottom: 0.5rem;"><strong>Request access</strong> to your personal data</li>
+                            <li style="margin-bottom: 0.5rem;"><strong>Request correction</strong> of your personal data</li>
+                            <li style="margin-bottom: 0.5rem;"><strong>Request erasure</strong> of your personal data</li>
+                            <li style="margin-bottom: 0.5rem;"><strong>Object to processing</strong> of your personal data</li>
+                            <li style="margin-bottom: 0.5rem;"><strong>Request restriction</strong> of processing your personal data</li>
+                            <li style="margin-bottom: 0.5rem;"><strong>Request transfer</strong> of your personal data</li>
+                            <li>Right to withdraw consent</li>
+                        </ul>
+                        
+                        <p>If you wish to exercise any of these rights, please contact us using the information provided in the "Contact Us" section below.</p>
+                    </div>
+                </div>
+                
+                <div class="policy-section">
+                    <h2 class="section-title-large"><span class="section-number">6</span> Third-Party Links</h2>
+                    <div class="section-content">
+                        <p>This website may include links to third-party websites, plug-ins, and applications. Clicking on those links or enabling those connections may allow third parties to collect or share data about you. We do not control these third-party websites and are not responsible for their privacy statements.</p>
+                        
+                        <p>When you leave our website, we encourage you to read the privacy policy of every website you visit.</p>
+                    </div>
+                </div>
+                
+                <div class="contact-cta">
+                    <a href="contact.html" class="contact-button">
+                        <i class="fas fa-envelope"></i> Contact Us About Privacy
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-column">
+                    <a href="index.html" class="logo" style="font-size: 2rem; margin-bottom: 1rem; display: inline-block;">
+                        <i class="fas fa-infinity"></i>
+                        God's <span>Zeal † Xmd</span>
+                    </a>
+                    <p style="color: var(--text-secondary); margin-bottom: 1.5rem;">The most advanced WhatsApp automation platform designed to streamline your communication and boost productivity.</p>
+                    <div class="social-links">
+                        <a href="https://github.com/AiOfLautech" class="social-link" target="_blank">
+                            <i class="fab fa-github"></i>
+                        </a>
+                        <a href="#" class="social-link">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                        <a href="#" class="social-link">
+                            <i class="fab fa-linkedin-in"></i>
+                        </a>
+                        <a href="#" class="social-link">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="footer-column">
+                    <h3>Quick Links</h3>
+                    <ul class="footer-links">
+                        <li><a href="index.html"><i class="fas fa-chevron-right"></i> Home</a></li>
+                        <li><a href="index.html#features"><i class="fas fa-chevron-right"></i> Features</a></li>
+                        <li><a href="index.html#how-it-works"><i class="fas fa-chevron-right"></i> How It Works</a></li>
+                        <li><a href="index.html#testimonials"><i class="fas fa-chevron-right"></i> Success Stories</a></li>
+                        <li><a href="ai.html"><i class="fas fa-chevron-right"></i> AI Assistant</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Resources</h3>
+                    <ul class="footer-links">
+                        <li><a href="privacy.html"><i class="fas fa-chevron-right"></i> Privacy Policy</a></li>
+                        <li><a href="terms.html"><i class="fas fa-chevron-right"></i> Terms of Service</a></li>
+                        <li><a href="contact.html"><i class="fas fa-chevron-right"></i> Contact Us</a></li>
+                        <li><a href="https://github.com/AiOfLautech/God-s-Zeal-Xmd" target="_blank"><i class="fab fa-github"></i> GitHub Repository</a></li>
+                        <li><a href="#"><i class="fas fa-chevron-right"></i> Documentation</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Get In Touch</h3>
+                    <ul class="footer-links">
+                        <li><a href="#"><i class="fas fa-envelope"></i> support@godszeal.tech</a></li>
+                        <li><a href="#"><i class="fas fa-phone"></i> +1 (555) 123-4567</a></li>
+                        <li><a href="#"><i class="fas fa-map-marker-alt"></i> 123 Innovation St, San Francisco, CA</a></li>
+                        <li><a href="#"><i class="fas fa-clock"></i> Mon-Fri: 9AM - 6PM</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2023 <span style="color: var(--primary);">God's Zeal † Xmd</span> by <a href="#">Godszeal Tech</a>. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Toast Container -->
+    <div class="toast-container"></div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Theme Toggle
+            const themeToggle = document.getElementById('themeToggle');
+            const themeToggleBall = document.querySelector('.theme-toggle-ball');
+            const htmlElement = document.documentElement;
+            
+            // Check for saved theme preference or respect OS preference
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDarkScheme = window.matchMedia('(prefers-color-scheme: dark)');
+            
+            if (savedTheme === 'dark' || (!savedTheme && prefersDarkScheme.matches)) {
+                htmlElement.classList.add('dark-mode');
+                themeToggleBall.style.left = 'calc(100% - 24px)';
+            }
+            
+            themeToggle.addEventListener('click', () => {
+                htmlElement.classList.toggle('dark-mode');
+                
+                if (htmlElement.classList.contains('dark-mode')) {
+                    localStorage.setItem('theme', 'dark');
+                    themeToggleBall.style.left = 'calc(100% - 24px)';
+                } else {
+                    localStorage.setItem('theme', 'light');
+                    themeToggleBall.style.left = '4px';
+                }
+            });
+
+            // Initialize animations
+            const animateOnScroll = () => {
+                const elements = document.querySelectorAll('.policy-section');
+                elements.forEach(element => {
+                    const elementPosition = element.getBoundingClientRect().top;
+                    const screenPosition = window.innerHeight / 1.3;
+                    
+                    if (elementPosition < screenPosition) {
+                        element.style.opacity = '1';
+                        element.style.transform = 'translateY(0)';
+                    }
+                });
+            };
+            
+            // Set initial state for animations
+            document.querySelectorAll('.policy-section').forEach(el => {
+                el.style.opacity = '0';
+                el.style.transform = 'translateY(20px)';
+                el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+            });
+            
+            window.addEventListener('scroll', animateOnScroll);
+            animateOnScroll(); // Check on initial load
+        });
+    </script>
+</body>
+</html>
