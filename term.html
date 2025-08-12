@@ -1,0 +1,746 @@
+<!DOCTYPE html>
+<html lang="en" class="light-mode">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>God's Zeal † Xmd - Terms of Service</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Montserrat:wght@700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            /* Light Mode Variables */
+            --primary: #6c5ce7;
+            --primary-dark: #5649c0;
+            --secondary: #00cec9;
+            --accent: #fd79a8;
+            --background: #ffffff;
+            --card-bg: #f8f9fa;
+            --text: #2d3436;
+            --text-secondary: #636e72;
+            --border: #e9ecef;
+            --success: #00b894;
+            --warning: #fdcb6e;
+            --danger: #ff7675;
+            --shadow: rgba(0, 0, 0, 0.08);
+            --transition: all 0.3s ease;
+        }
+
+        .dark-mode {
+            --primary: #7c6fe1;
+            --primary-dark: #6a5bc7;
+            --secondary: #00d3d0;
+            --accent: #ff85b7;
+            --background: #121212;
+            --card-bg: #1e1e1e;
+            --text: #f5f5f5;
+            --text-secondary: #b0b0b0;
+            --border: #2d2d2d;
+            --shadow: rgba(0, 0, 0, 0.2);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--background);
+            color: var(--text);
+            line-height: 1.6;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        /* Header & Navigation */
+        header {
+            padding: 1.5rem 0;
+            background-color: var(--background);
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            text-decoration: none;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 900;
+            font-size: 1.8rem;
+            color: var(--primary);
+        }
+
+        .logo span {
+            color: var(--secondary);
+        }
+
+        .logo i {
+            font-size: 2.2rem;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            color: var(--text);
+            text-decoration: none;
+            font-weight: 500;
+            position: relative;
+            transition: var(--transition);
+            font-size: 1.05rem;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -4px;
+            left: 0;
+            background-color: var(--primary);
+            transition: var(--transition);
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .nav-actions {
+            display: flex;
+            align-items: center;
+            gap: 1.2rem;
+        }
+
+        .theme-toggle {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            width: 48px;
+            height: 28px;
+            border-radius: 15px;
+            position: relative;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            padding: 0 4px;
+            transition: var(--transition);
+        }
+
+        .theme-toggle-ball {
+            width: 20px;
+            height: 20px;
+            background: var(--primary);
+            border-radius: 50%;
+            position: absolute;
+            left: 4px;
+            transition: var(--transition);
+        }
+
+        .dark-mode .theme-toggle-ball {
+            left: calc(100% - 24px);
+        }
+
+        /* Terms Section */
+        .section {
+            padding: 6rem 0;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .section-title {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 2.8rem;
+            margin-bottom: 1.2rem;
+            position: relative;
+            display: inline-block;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            width: 60%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            bottom: -10px;
+            left: 20%;
+            border-radius: 2px;
+        }
+
+        .section-subtitle {
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+            max-width: 700px;
+            margin: 0 auto 0;
+        }
+
+        .terms-content {
+            max-width: 850px;
+            margin: 0 auto;
+        }
+
+        .terms-intro {
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 2.5rem;
+            box-shadow: 0 5px 15px var(--shadow);
+            border: 1px solid var(--border);
+            margin-bottom: 3rem;
+        }
+
+        .terms-intro p {
+            font-size: 1.1rem;
+            line-height: 1.7;
+            color: var(--text-secondary);
+        }
+
+        .last-updated {
+            text-align: right;
+            color: var(--text-secondary);
+            font-style: italic;
+            margin-top: 1rem;
+            font-size: 0.9rem;
+        }
+
+        .terms-section {
+            margin-bottom: 2.5rem;
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 2rem;
+            box-shadow: 0 5px 15px var(--shadow);
+            border: 1px solid var(--border);
+            transition: var(--transition);
+        }
+
+        .terms-section:hover {
+            border-color: var(--primary);
+            transform: translateY(-5px);
+        }
+
+        .section-number {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 30px;
+            height: 30px;
+            background: var(--primary);
+            color: white;
+            border-radius: 50%;
+            font-weight: 600;
+            margin-right: 10px;
+        }
+
+        .section-title-large {
+            font-size: 1.6rem;
+            margin-bottom: 1.2rem;
+            display: flex;
+            align-items: center;
+        }
+
+        .section-content h3 {
+            font-size: 1.3rem;
+            margin: 1.2rem 0 0.8rem;
+            color: var(--primary);
+        }
+
+        .section-content p {
+            margin-bottom: 1rem;
+            line-height: 1.7;
+        }
+
+        .highlight-box {
+            background: rgba(253, 121, 168, 0.08);
+            border-left: 4px solid var(--accent);
+            padding: 1.2rem;
+            border-radius: 0 8px 8px 0;
+            margin: 1.5rem 0;
+        }
+
+        .important-note {
+            background: rgba(253, 203, 110, 0.08);
+            border-left: 4px solid var(--warning);
+            padding: 1.2rem;
+            border-radius: 0 8px 8px 0;
+            margin: 1.5rem 0;
+        }
+
+        .contact-cta {
+            text-align: center;
+            margin-top: 3rem;
+        }
+
+        .contact-button {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            border: none;
+            padding: 0.9rem 2rem;
+            border-radius: 30px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 1.05rem;
+        }
+
+        .contact-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Footer */
+        footer {
+            background: var(--card-bg);
+            padding: 4rem 0 2rem;
+            border-top: 1px solid var(--border);
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .footer-column h3 {
+            font-size: 1.4rem;
+            margin-bottom: 1.5rem;
+            position: relative;
+            padding-bottom: 0.8rem;
+        }
+
+        .footer-column h3::after {
+            content: '';
+            position: absolute;
+            width: 40px;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            bottom: 0;
+            left: 0;
+            border-radius: 2px;
+        }
+
+        .footer-links {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 0.8rem;
+        }
+
+        .footer-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+        }
+
+        .footer-links a:hover {
+            color: var(--primary);
+            transform: translateX(3px);
+        }
+
+        .social-links {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .social-link {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text);
+            transition: var(--transition);
+            text-decoration: none;
+        }
+
+        .social-link:hover {
+            background: var(--primary);
+            color: white;
+            transform: translateY(-3px);
+            border-color: var(--primary);
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 2rem;
+            border-top: 1px solid var(--border);
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+
+        .footer-bottom a {
+            color: var(--primary);
+            text-decoration: none;
+        }
+
+        /* Toast Notifications */
+        .toast-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .toast {
+            padding: 15px 25px;
+            border-radius: 10px;
+            color: white;
+            font-weight: 500;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            animation: slideIn 0.3s ease, fadeOut 0.3s ease 2.7s forwards;
+            transform: translateX(100%);
+        }
+
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        @keyframes fadeOut {
+            from { opacity: 1; }
+            to { opacity: 0; transform: translateX(100%); }
+        }
+
+        .toast-success {
+            background: var(--success);
+        }
+
+        .toast-error {
+            background: var(--danger);
+        }
+
+        .toast-info {
+            background: var(--primary);
+        }
+
+        @media (max-width: 768px) {
+            .section {
+                padding: 4rem 0;
+            }
+            
+            .section-title {
+                font-size: 2.2rem;
+            }
+            
+            .terms-intro, .terms-section {
+                padding: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <nav>
+                <a href="index.html" class="logo">
+                    <i class="fas fa-infinity"></i>
+                    God's <span>Zeal † Xmd</span>
+                </a>
+                <div class="nav-links">
+                    <a href="index.html#features">Features</a>
+                    <a href="index.html#how-it-works">How It Works</a>
+                    <a href="index.html#testimonials">Success Stories</a>
+                    <a href="ai.html">AI Assistant</a>
+                </div>
+                <div class="nav-actions">
+                    <div class="theme-toggle" id="themeToggle">
+                        <div class="theme-toggle-ball"></div>
+                    </div>
+                    <a href="pair.html" class="contact-button">
+                        <i class="fas fa-rocket"></i> Get Started
+                    </a>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Terms Section -->
+    <section class="section">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Terms of Service</h2>
+                <p class="section-subtitle">Last updated: November 15, 2023</p>
+            </div>
+            
+            <div class="terms-content">
+                <div class="terms-intro">
+                    <p>These Terms of Service ("Terms") govern your access to and use of the God's Zeal † Xmd website and services (collectively, the "Service") provided by Godszeal Tech ("we," "us," or "our"). Please read these Terms carefully before using our Service.</p>
+                    <div class="last-updated">Effective Date: November 15, 2023</div>
+                </div>
+                
+                <div class="terms-section">
+                    <h2 class="section-title-large"><span class="section-number">1</span> Acceptance of Terms</h2>
+                    <div class="section-content">
+                        <p>By accessing or using the Service, you agree to be bound by these Terms and all terms incorporated by reference. If you do not agree to all of these Terms, you are expressly prohibited from using the Service and must discontinue use immediately.</p>
+                        
+                        <p>God's Zeal † Xmd is a WhatsApp automation platform that helps businesses and individuals streamline their communication. Our services include pair code generation, QR code scanning, and AI-powered automation features.</p>
+                        
+                        <div class="important-note">
+                            <p><strong>Important:</strong> You must be at least 18 years old to use our Service. By using the Service, you represent and warrant that you are at least 18 years old.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="terms-section">
+                    <h2 class="section-title-large"><span class="section-number">2</span> Description of Service</h2>
+                    <div class="section-content">
+                        <p>God's Zeal † Xmd provides a platform for WhatsApp automation, allowing users to:</p>
+                        
+                        <ul style="padding-left: 20px; margin: 1rem 0;">
+                            <li style="margin-bottom: 0.5rem;">Generate secure pair codes for WhatsApp Web/Desktop</li>
+                            <li style="margin-bottom: 0.5rem;">Scan QR codes to link WhatsApp accounts</li>
+                            <li style="margin-bottom: 0.5rem;">Create automated workflows and responses</li>
+                            <li style="margin-bottom: 0.5rem;">Manage multiple WhatsApp connections</li>
+                            <li>Access AI-powered communication features</li>
+                        </ul>
+                        
+                        <p>We reserve the right to modify or discontinue, temporarily or permanently, the Service (or any part thereof) with or without notice. You agree that we shall not be liable to you or any third party for any modification, suspension, or discontinuance of the Service.</p>
+                    </div>
+                </div>
+                
+                <div class="terms-section">
+                    <h2 class="section-title-large"><span class="section-number">3</span> User Responsibilities</h2>
+                    <div class="section-content">
+                        <p>When using the Service, you agree to:</p>
+                        
+                        <ul style="padding-left: 20px; margin: 1rem 0;">
+                            <li style="margin-bottom: 0.8rem;"><strong>Comply with all applicable laws:</strong> You agree to use the Service in compliance with all applicable local, state, national, and international laws and regulations.</li>
+                            <li style="margin-bottom: 0.8rem;"><strong>Respect WhatsApp's Terms:</strong> You acknowledge that God's Zeal † Xmd is an independent service and not affiliated with WhatsApp Inc. You agree to comply with WhatsApp's Terms of Service and Privacy Policy.</li>
+                            <li style="margin-bottom: 0.8rem;"><strong>Prohibited Activities:</strong> You agree not to use the Service for any unlawful purpose or for promotion of illegal activities. You also agree not to:</li>
+                        </ul>
+                        
+                        <ul style="padding-left: 40px; margin: 1rem 0; list-style-type: circle;">
+                            <li style="margin-bottom: 0.5rem;">Engage in spamming or sending unsolicited messages</li>
+                            <li style="margin-bottom: 0.5rem;">Attempt to gain unauthorized access to the Service</li>
+                            <li style="margin-bottom: 0.5rem;">Interfere with the proper working of the Service</li>
+                            <li style="margin-bottom: 0.5rem;">Use the Service to transmit viruses or other harmful code</li>
+                            <li>Use the Service for pyramid schemes or other illegal activities</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="terms-section">
+                    <h2 class="section-title-large"><span class="section-number">4</span> Account Registration</h2>
+                    <div class="section-content">
+                        <p>To access certain features of the Service, you may be required to create an account. When you create an account:</p>
+                        
+                        <ul style="padding-left: 20px; margin: 1rem 0;">
+                            <li style="margin-bottom: 0.5rem;">You must provide accurate and complete information</li>
+                            <li style="margin-bottom: 0.5rem;">You are responsible for maintaining the security of your account</li>
+                            <li style="margin-bottom: 0.5rem;">You are responsible for all activities that occur under your account</li>
+                            <li>You must notify us immediately of any unauthorized use of your account</li>
+                        </ul>
+                        
+                        <p>We reserve the right to refuse service, terminate accounts, or remove or edit content at our sole discretion.</p>
+                    </div>
+                </div>
+                
+                <div class="terms-section">
+                    <h2 class="section-title-large"><span class="section-number">5</span> Intellectual Property</h2>
+                    <div class="section-content">
+                        <p>The Service and its original content, features, and functionality are owned by Godszeal Tech and are protected by international copyright, trademark, patent, trade secret, and other intellectual property or proprietary rights laws.</p>
+                        
+                        <p>You acknowledge and agree that the Service may contain content specifically provided by us, our partners, or our users. All such content is protected by copyright, trademark, patent, or other proprietary rights and laws.</p>
+                        
+                        <div class="highlight-box">
+                            <p><strong>GitHub Repository:</strong> Our source code is available on GitHub at <a href="https://github.com/AiOfLautech/God-s-Zeal-Xmd" style="color: var(--primary); text-decoration: underline;">https://github.com/AiOfLautech/God-s-Zeal-Xmd</a>. The code is licensed under the GNU General Public License v3.0, which grants you the freedom to run, study, share, and modify the software.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="terms-section">
+                    <h2 class="section-title-large"><span class="section-number">6</span> Termination</h2>
+                    <div class="section-content">
+                        <p>We may terminate or suspend your account and bar access to the Service immediately, without prior notice or liability, under our sole discretion, for any reason whatsoever and without limitation, including but not limited to a breach of the Terms.</p>
+                        
+                        <p>Upon termination, your right to use the Service will immediately cease. If you wish to terminate your account, you may simply discontinue using the Service.</p>
+                        
+                        <p>All provisions of the Terms which by their nature should survive termination shall survive termination, including, without limitation, ownership provisions, warranty disclaimers, indemnity, and limitations of liability.</p>
+                    </div>
+                </div>
+                
+                <div class="terms-section">
+                    <h2 class="section-title-large"><span class="section-number">7</span> Disclaimer of Warranties</h2>
+                    <div class="section-content">
+                        <p>The Service is provided "AS IS" and "AS AVAILABLE" without warranties of any kind, either express or implied, including, but not limited to, implied warranties of merchantability, fitness for a particular purpose, non-infringement, or course of performance.</p>
+                        
+                        <p>Godszeal Tech expressly disclaims any warranties and conditions of any kind, whether express or implied, including but not limited to the implied warranties of merchantability, fitness for a particular purpose, title, and non-infringement.</p>
+                        
+                        <p>We do not warrant that the Service will function uninterrupted, secure, or error-free, or that any defects will be corrected. We do not warrant the accuracy or completeness of the information, text, graphics, links, or other items contained within the Service.</p>
+                    </div>
+                </div>
+                
+                <div class="terms-section">
+                    <h2 class="section-title-large"><span class="section-number">8</span> Limitation of Liability</h2>
+                    <div class="section-content">
+                        <p>To the fullest extent permitted by applicable law, in no event shall Godszeal Tech, its affiliates, agents, directors, employees, suppliers, or licensors be liable for any indirect, incidental, special, consequential, or exemplary damages, including but not limited to damages for loss of profits, goodwill, use, data, or other intangible losses, resulting from your access to or use of or inability to access or use the Service.</p>
+                        
+                        <p>Our total liability to you for all claims under these Terms is limited to the amount you paid us to use the Service in the last six months.</p>
+                    </div>
+                </div>
+                
+                <div class="contact-cta">
+                    <a href="contact.html" class="contact-button">
+                        <i class="fas fa-envelope"></i> Contact Us About Terms
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-column">
+                    <a href="index.html" class="logo" style="font-size: 2rem; margin-bottom: 1rem; display: inline-block;">
+                        <i class="fas fa-infinity"></i>
+                        God's <span>Zeal † Xmd</span>
+                    </a>
+                    <p style="color: var(--text-secondary); margin-bottom: 1.5rem;">The most advanced WhatsApp automation platform designed to streamline your communication and boost productivity.</p>
+                    <div class="social-links">
+                        <a href="https://github.com/AiOfLautech" class="social-link" target="_blank">
+                            <i class="fab fa-github"></i>
+                        </a>
+                        <a href="#" class="social-link">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                        <a href="#" class="social-link">
+                            <i class="fab fa-linkedin-in"></i>
+                        </a>
+                        <a href="#" class="social-link">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="footer-column">
+                    <h3>Quick Links</h3>
+                    <ul class="footer-links">
+                        <li><a href="index.html"><i class="fas fa-chevron-right"></i> Home</a></li>
+                        <li><a href="index.html#features"><i class="fas fa-chevron-right"></i> Features</a></li>
+                        <li><a href="index.html#how-it-works"><i class="fas fa-chevron-right"></i> How It Works</a></li>
+                        <li><a href="index.html#testimonials"><i class="fas fa-chevron-right"></i> Success Stories</a></li>
+                        <li><a href="ai.html"><i class="fas fa-chevron-right"></i> AI Assistant</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Resources</h3>
+                    <ul class="footer-links">
+                        <li><a href="privacy.html"><i class="fas fa-chevron-right"></i> Privacy Policy</a></li>
+                        <li><a href="terms.html"><i class="fas fa-chevron-right"></i> Terms of Service</a></li>
+                        <li><a href="contact.html"><i class="fas fa-chevron-right"></i> Contact Us</a></li>
+                        <li><a href="https://github.com/AiOfLautech/God-s-Zeal-Xmd" target="_blank"><i class="fab fa-github"></i> GitHub Repository</a></li>
+                        <li><a href="#"><i class="fas fa-chevron-right"></i> Documentation</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Get In Touch</h3>
+                    <ul class="footer-links">
+                        <li><a href="#"><i class="fas fa-envelope"></i> support@godszeal.tech</a></li>
+                        <li><a href="#"><i class="fas fa-phone"></i> +1 (555) 123-4567</a></li>
+                        <li><a href="#"><i class="fas fa-map-marker-alt"></i> 123 Innovation St, San Francisco, CA</a></li>
+                        <li><a href="#"><i class="fas fa-clock"></i> Mon-Fri: 9AM - 6PM</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2023 <span style="color: var(--primary);">God's Zeal † Xmd</span> by <a href="#">Godszeal Tech</a>. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Toast Container -->
+    <div class="toast-container"></div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Theme Toggle
+            const themeToggle = document.getElementById('themeToggle');
+            const themeToggleBall = document.querySelector('.theme-toggle-ball');
+            const htmlElement = document.documentElement;
+            
+            // Check for saved theme preference or respect OS preference
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDarkScheme = window.matchMedia('(prefers-color-scheme: dark)');
+            
+            if (savedTheme === 'dark' || (!savedTheme && prefersDarkScheme.matches)) {
+                htmlElement.classList.add('dark-mode');
+                themeToggleBall.style.left = 'calc(100% - 24px)';
+            }
+            
+            themeToggle.addEventListener('click', () => {
+                htmlElement.classList.toggle('dark-mode');
+                
+                if (htmlElement.classList.contains('dark-mode')) {
+                    localStorage.setItem('theme', 'dark');
+                    themeToggleBall.style.left = 'calc(100% - 24px)';
+                } else {
+                    localStorage.setItem('theme', 'light');
+                    themeToggleBall.style.left = '4px';
+                }
+            });
+
+            // Initialize animations
+            const animateOnScroll = () => {
+                const elements = document.querySelectorAll('.terms-section');
+                elements.forEach(element => {
+                    const elementPosition = element.getBoundingClientRect().top;
+                    const screenPosition = window.innerHeight / 1.3;
+                    
+                    if (elementPosition < screenPosition) {
+                        element.style.opacity = '1';
+                        element.style.transform = 'translateY(0)';
+                    }
+                });
+            };
+            
+            // Set initial state for animations
+            document.querySelectorAll('.terms-section').forEach(el => {
+                el.style.opacity = '0';
+                el.style.transform = 'translateY(20px)';
+                el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+            });
+            
+            window.addEventListener('scroll', animateOnScroll);
+            animateOnScroll(); // Check on initial load
+        });
+    </script>
+</body>
+</html>
