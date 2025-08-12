@@ -1,0 +1,1300 @@
+<!DOCTYPE html>
+<html lang="en" class="light-mode">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>God's Zeal † Xmd - Blog</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Montserrat:wght@700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            /* Light Mode Variables */
+            --primary: #6c5ce7;
+            --primary-dark: #5649c0;
+            --secondary: #00cec9;
+            --accent: #fd79a8;
+            --background: #ffffff;
+            --card-bg: #f8f9fa;
+            --text: #2d3436;
+            --text-secondary: #636e72;
+            --border: #e9ecef;
+            --success: #00b894;
+            --warning: #fdcb6e;
+            --danger: #ff7675;
+            --shadow: rgba(0, 0, 0, 0.08);
+            --transition: all 0.3s ease;
+        }
+
+        .dark-mode {
+            --primary: #7c6fe1;
+            --primary-dark: #6a5bc7;
+            --secondary: #00d3d0;
+            --accent: #ff85b7;
+            --background: #121212;
+            --card-bg: #1e1e1e;
+            --text: #f5f5f5;
+            --text-secondary: #b0b0b0;
+            --border: #2d2d2d;
+            --shadow: rgba(0, 0, 0, 0.2);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--background);
+            color: var(--text);
+            line-height: 1.6;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        /* Header & Navigation */
+        header {
+            padding: 1.5rem 0;
+            background-color: var(--background);
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            text-decoration: none;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 900;
+            font-size: 1.8rem;
+            color: var(--primary);
+        }
+
+        .logo span {
+            color: var(--secondary);
+        }
+
+        .logo i {
+            font-size: 2.2rem;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            color: var(--text);
+            text-decoration: none;
+            font-weight: 500;
+            position: relative;
+            transition: var(--transition);
+            font-size: 1.05rem;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -4px;
+            left: 0;
+            background-color: var(--primary);
+            transition: var(--transition);
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .nav-actions {
+            display: flex;
+            align-items: center;
+            gap: 1.2rem;
+        }
+
+        .theme-toggle {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            width: 48px;
+            height: 28px;
+            border-radius: 15px;
+            position: relative;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            padding: 0 4px;
+            transition: var(--transition);
+        }
+
+        .theme-toggle-ball {
+            width: 20px;
+            height: 20px;
+            background: var(--primary);
+            border-radius: 50%;
+            position: absolute;
+            left: 4px;
+            transition: var(--transition);
+        }
+
+        .dark-mode .theme-toggle-ball {
+            left: calc(100% - 24px);
+        }
+
+        /* Blog Section */
+        .section {
+            padding: 6rem 0;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .section-title {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 2.8rem;
+            margin-bottom: 1.2rem;
+            position: relative;
+            display: inline-block;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            width: 60%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            bottom: -10px;
+            left: 20%;
+            border-radius: 2px;
+        }
+
+        .section-subtitle {
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+            max-width: 700px;
+            margin: 0 auto 0;
+        }
+
+        .blog-filters {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 2.5rem;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            padding: 0.6rem 1.2rem;
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 30px;
+            color: var(--text);
+            cursor: pointer;
+            transition: var(--transition);
+            font-weight: 500;
+        }
+
+        .filter-btn.active, .filter-btn:hover {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        .blog-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2.5rem;
+        }
+
+        .blog-card {
+            background: var(--card-bg);
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px var(--shadow);
+            border: 1px solid var(--border);
+            transition: var(--transition);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .blog-card:hover {
+            transform: translateY(-10px);
+            border-color: var(--primary);
+        }
+
+        .blog-image {
+            height: 220px;
+            width: 100%;
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 3rem;
+        }
+
+        .blog-content {
+            padding: 1.8rem;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .blog-category {
+            display: inline-block;
+            padding: 0.4rem 0.8rem;
+            background: rgba(108, 92, 231, 0.1);
+            color: var(--primary);
+            border-radius: 30px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .blog-title {
+            font-size: 1.6rem;
+            margin-bottom: 1rem;
+            font-weight: 600;
+            transition: var(--transition);
+        }
+
+        .blog-card:hover .blog-title {
+            color: var(--primary);
+        }
+
+        .blog-excerpt {
+            color: var(--text-secondary);
+            margin-bottom: 1.5rem;
+            line-height: 1.7;
+            flex-grow: 1;
+        }
+
+        .blog-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .blog-author {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+        }
+
+        .author-avatar {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 0.85rem;
+        }
+
+        .blog-read-more {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 500;
+            transition: var(--transition);
+            margin-top: 0.5rem;
+        }
+
+        .blog-read-more:hover {
+            gap: 0.8rem;
+        }
+
+        .blog-pagination {
+            display: flex;
+            justify-content: center;
+            gap: 0.5rem;
+            margin-top: 3rem;
+        }
+
+        .pagination-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            color: var(--text);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .pagination-btn.active, .pagination-btn:hover {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        .ai-content-notice {
+            text-align: center;
+            padding: 1.5rem;
+            background: rgba(108, 92, 231, 0.08);
+            border-left: 4px solid var(--primary);
+            border-radius: 8px;
+            margin: 2rem 0;
+            color: var(--text-secondary);
+        }
+
+        .ai-content-notice i {
+            color: var(--primary);
+            margin-right: 0.5rem;
+        }
+
+        .blog-post {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .post-header {
+            text-align: center;
+            margin-bottom: 2.5rem;
+        }
+
+        .post-category {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            background: rgba(108, 92, 231, 0.1);
+            color: var(--primary);
+            border-radius: 30px;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .post-title {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 2.5rem;
+            margin-bottom: 1.2rem;
+            line-height: 1.2;
+        }
+
+        .post-meta {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            margin-bottom: 2rem;
+        }
+
+        .post-author {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+        }
+
+        .post-date {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .post-image {
+            width: 100%;
+            height: 400px;
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            border-radius: 16px;
+            margin-bottom: 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 3rem;
+        }
+
+        .post-content {
+            line-height: 1.8;
+            color: var(--text-secondary);
+            font-size: 1.05rem;
+        }
+
+        .post-content h2 {
+            font-size: 1.8rem;
+            margin: 2rem 0 1rem;
+            color: var(--text);
+        }
+
+        .post-content h3 {
+            font-size: 1.5rem;
+            margin: 1.8rem 0 1rem;
+            color: var(--text);
+        }
+
+        .post-content p {
+            margin-bottom: 1.5rem;
+        }
+
+        .post-content ul, .post-content ol {
+            padding-left: 1.8rem;
+            margin: 1.5rem 0;
+        }
+
+        .post-content li {
+            margin-bottom: 0.8rem;
+        }
+
+        .post-content blockquote {
+            border-left: 4px solid var(--primary);
+            padding: 1rem 1.5rem;
+            background: var(--card-bg);
+            margin: 1.5rem 0;
+            border-radius: 0 8px 8px 0;
+            color: var(--text);
+            font-style: italic;
+        }
+
+        .post-content img {
+            width: 100%;
+            border-radius: 12px;
+            margin: 1.5rem 0;
+        }
+
+        .post-footer {
+            margin-top: 3rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--border);
+        }
+
+        .post-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.8rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .tag {
+            padding: 0.4rem 1rem;
+            background: var(--card-bg);
+            border-radius: 30px;
+            font-size: 0.9rem;
+            color: var(--text);
+            border: 1px solid var(--border);
+            transition: var(--transition);
+        }
+
+        .tag:hover {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        .post-sharing {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .sharing-label {
+            font-weight: 500;
+            color: var(--text-secondary);
+        }
+
+        .sharing-links {
+            display: flex;
+            gap: 0.8rem;
+        }
+
+        .sharing-link {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--card-bg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text);
+            border: 1px solid var(--border);
+            transition: var(--transition);
+        }
+
+        .sharing-link:hover {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+            transform: translateY(-3px);
+        }
+
+        .related-posts {
+            margin-top: 4rem;
+        }
+
+        .related-posts h3 {
+            font-size: 1.8rem;
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+
+        /* Footer */
+        footer {
+            background: var(--card-bg);
+            padding: 4rem 0 2rem;
+            border-top: 1px solid var(--border);
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .footer-column h3 {
+            font-size: 1.4rem;
+            margin-bottom: 1.5rem;
+            position: relative;
+            padding-bottom: 0.8rem;
+        }
+
+        .footer-column h3::after {
+            content: '';
+            position: absolute;
+            width: 40px;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            bottom: 0;
+            left: 0;
+            border-radius: 2px;
+        }
+
+        .footer-links {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 0.8rem;
+        }
+
+        .footer-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+        }
+
+        .footer-links a:hover {
+            color: var(--primary);
+            transform: translateX(3px);
+        }
+
+        .social-links {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .social-link {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text);
+            transition: var(--transition);
+            text-decoration: none;
+        }
+
+        .social-link:hover {
+            background: var(--primary);
+            color: white;
+            transform: translateY(-3px);
+            border-color: var(--primary);
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 2rem;
+            border-top: 1px solid var(--border);
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+
+        .footer-bottom a {
+            color: var(--primary);
+            text-decoration: none;
+        }
+
+        /* Toast Notifications */
+        .toast-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .toast {
+            padding: 15px 25px;
+            border-radius: 10px;
+            color: white;
+            font-weight: 500;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            animation: slideIn 0.3s ease, fadeOut 0.3s ease 2.7s forwards;
+            transform: translateX(100%);
+        }
+
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        @keyframes fadeOut {
+            from { opacity: 1; }
+            to { opacity: 0; transform: translateX(100%); }
+        }
+
+        .toast-success {
+            background: var(--success);
+        }
+
+        .toast-error {
+            background: var(--danger);
+        }
+
+        .toast-info {
+            background: var(--primary);
+        }
+
+        /* Blog Post Page Specific Styles */
+        .blog-post-page .blog-grid,
+        .blog-post-page .blog-filters,
+        .blog-post-page .section-header {
+            display: none;
+        }
+
+        @media (max-width: 768px) {
+            .section {
+                padding: 4rem 0;
+            }
+            
+            .section-title {
+                font-size: 2.2rem;
+            }
+            
+            .blog-image {
+                height: 180px;
+            }
+            
+            .post-image {
+                height: 300px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <nav>
+                <a href="index.html" class="logo">
+                    <i class="fas fa-infinity"></i>
+                    God's <span>Zeal † Xmd</span>
+                </a>
+                <div class="nav-links">
+                    <a href="index.html#features">Features</a>
+                    <a href="index.html#how-it-works">How It Works</a>
+                    <a href="index.html#testimonials">Success Stories</a>
+                    <a href="ai.html">AI Assistant</a>
+                </div>
+                <div class="nav-actions">
+                    <div class="theme-toggle" id="themeToggle">
+                        <div class="theme-toggle-ball"></div>
+                    </div>
+                    <a href="pair.html" class="cta-button">
+                        <i class="fas fa-rocket"></i> Get Started
+                    </a>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Blog Section -->
+    <section class="section">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">God's Zeal Blog</h2>
+                <p class="section-subtitle">Insights, updates, and stories about WhatsApp automation, AI, and communication technology</p>
+            </div>
+            
+            <div class="ai-content-notice">
+                <i class="fas fa-robot"></i> All blog content is generated by God's Zeal AI, our intelligent content assistant
+            </div>
+            
+            <div class="blog-filters">
+                <button class="filter-btn active" data-filter="all">All Posts</button>
+                <button class="filter-btn" data-filter="news">News</button>
+                <button class="filter-btn" data-filter="updates">Updates</button>
+                <button class="filter-btn" data-filter="tutorials">Tutorials</button>
+                <button class="filter-btn" data-filter="case-studies">Case Studies</button>
+            </div>
+            
+            <div class="blog-grid">
+                <article class="blog-card">
+                    <div class="blog-image">
+                        <i class="fas fa-rocket"></i>
+                    </div>
+                    <div class="blog-content">
+                        <span class="blog-category">Updates</span>
+                        <h3 class="blog-title">God's Zeal † Xmd v2.3 Released with Enhanced AI Capabilities</h3>
+                        <p class="blog-excerpt">We're excited to announce the release of God's Zeal † Xmd v2.3, featuring significant improvements to our AI-powered automation features and a completely redesigned user interface.</p>
+                        <div class="blog-meta">
+                            <div class="blog-author">
+                                <div class="author-avatar">GD</div>
+                                <span>God's Zeal AI</span>
+                            </div>
+                            <div class="blog-date">
+                                <i class="far fa-calendar"></i> Nov 15, 2023
+                            </div>
+                        </div>
+                        <a href="#blog-post" class="blog-read-more">Read More <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </article>
+                
+                <article class="blog-card">
+                    <div class="blog-image">
+                        <i class="fas fa-book-open"></i>
+                    </div>
+                    <div class="blog-content">
+                        <span class="blog-category">Tutorials</span>
+                        <h3 class="blog-title">Setting Up Your First WhatsApp Automation Workflow in 5 Minutes</h3>
+                        <p class="blog-excerpt">New to God's Zeal † Xmd? This step-by-step tutorial will guide you through creating your first WhatsApp automation workflow, from generating your pair code to setting up automated responses.</p>
+                        <div class="blog-meta">
+                            <div class="blog-author">
+                                <div class="author-avatar">GD</div>
+                                <span>God's Zeal AI</span>
+                            </div>
+                            <div class="blog-date">
+                                <i class="far fa-calendar"></i> Nov 10, 2023
+                            </div>
+                        </div>
+                        <a href="#blog-post" class="blog-read-more">Read More <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </article>
+                
+                <article class="blog-card">
+                    <div class="blog-image">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <div class="blog-content">
+                        <span class="blog-category">Case Studies</span>
+                        <h3 class="blog-title">How a Small Business Increased Customer Engagement by 75% Using God's Zeal † Xmd</h3>
+                        <p class="blog-excerpt">Discover how "Bella's Boutique" transformed their customer communication strategy using God's Zeal † Xmd, resulting in a 75% increase in customer engagement and a 40% boost in sales.</p>
+                        <div class="blog-meta">
+                            <div class="blog-author">
+                                <div class="author-avatar">GD</div>
+                                <span>God's Zeal AI</span>
+                            </div>
+                            <div class="blog-date">
+                                <i class="far fa-calendar"></i> Nov 5, 2023
+                            </div>
+                        </div>
+                        <a href="#blog-post" class="blog-read-more">Read More <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </article>
+                
+                <article class="blog-card">
+                    <div class="blog-image">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <div class="blog-content">
+                        <span class="blog-category">News</span>
+                        <h3 class="blog-title">Security Best Practices for WhatsApp Automation: What You Need to Know</h3>
+                        <p class="blog-excerpt">In this comprehensive guide, we explore the security features of God's Zeal † Xmd and provide actionable tips to ensure your WhatsApp automation remains secure and compliant.</p>
+                        <div class="blog-meta">
+                            <div class="blog-author">
+                                <div class="author-avatar">GD</div>
+                                <span>God's Zeal AI</span>
+                            </div>
+                            <div class="blog-date">
+                                <i class="far fa-calendar"></i> Oct 28, 2023
+                            </div>
+                        </div>
+                        <a href="#blog-post" class="blog-read-more">Read More <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </article>
+                
+                <article class="blog-card">
+                    <div class="blog-image">
+                        <i class="fas fa-lightbulb"></i>
+                    </div>
+                    <div class="blog-content">
+                        <span class="blog-category">Tutorials</span>
+                        <h3 class="blog-title">Advanced Workflow Automation: Creating Conditional Responses in God's Zeal † Xmd</h3>
+                        <p class="blog-excerpt">Take your WhatsApp automation to the next level with conditional responses. This tutorial shows you how to create sophisticated workflows that respond intelligently to different customer inputs.</p>
+                        <div class="blog-meta">
+                            <div class="blog-author">
+                                <div class="author-avatar">GD</div>
+                                <span>God's Zeal AI</span>
+                            </div>
+                            <div class="blog-date">
+                                <i class="far fa-calendar"></i> Oct 20, 2023
+                            </div>
+                        </div>
+                        <a href="#blog-post" class="blog-read-more">Read More <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </article>
+                
+                <article class="blog-card">
+                    <div class="blog-image">
+                        <i class="fas fa-mobile-alt"></i>
+                    </div>
+                    <div class="blog-content">
+                        <span class="blog-category">Updates</span>
+                        <h3 class="blog-title">Mobile App Launch: Manage Your Workflows On-the-Go</h3>
+                        <p class="blog-excerpt">We're thrilled to announce the launch of our mobile app, bringing the power of God's Zeal † Xmd to your smartphone. Manage your workflows, check analytics, and respond to customers from anywhere.</p>
+                        <div class="blog-meta">
+                            <div class="blog-author">
+                                <div class="author-avatar">GD</div>
+                                <span>God's Zeal AI</span>
+                            </div>
+                            <div class="blog-date">
+                                <i class="far fa-calendar"></i> Oct 15, 2023
+                            </div>
+                        </div>
+                        <a href="#blog-post" class="blog-read-more">Read More <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </article>
+            </div>
+            
+            <div class="blog-pagination">
+                <button class="pagination-btn active">1</button>
+                <button class="pagination-btn">2</button>
+                <button class="pagination-btn">3</button>
+                <button class="pagination-btn"><i class="fas fa-chevron-right"></i></button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Blog Post Page (Hidden by default) -->
+    <section class="section blog-post-page" id="blog-post" style="display: none;">
+        <div class="container">
+            <article class="blog-post">
+                <div class="post-header">
+                    <span class="post-category">Updates</span>
+                    <h1 class="post-title">God's Zeal † Xmd v2.3 Released with Enhanced AI Capabilities</h1>
+                    <div class="post-meta">
+                        <div class="post-author">
+                            <div class="author-avatar">GD</div>
+                            <span>God's Zeal AI</span>
+                        </div>
+                        <div class="post-date">
+                            <i class="far fa-calendar"></i> Nov 15, 2023
+                        </div>
+                        <div class="post-read-time">
+                            <i class="far fa-clock"></i> 5 min read
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="post-image">
+                    <i class="fas fa-rocket"></i>
+                </div>
+                
+                <div class="post-content">
+                    <p>We're thrilled to announce the release of God's Zeal † Xmd v2.3, our most significant update yet! This release brings powerful new AI capabilities, a redesigned user interface, and several performance improvements that will transform how you use our platform.</p>
+                    
+                    <h2>What's New in v2.3</h2>
+                    
+                    <p>After months of development and feedback from our amazing community, we've packed v2.3 with features designed to make your WhatsApp automation experience smoother, more powerful, and more intuitive.</p>
+                    
+                    <h3>Enhanced AI Assistant</h3>
+                    
+                    <p>The centerpiece of this update is our completely revamped AI assistant. Now powered by God's Zeal AI, our intelligent assistant can help you with:</p>
+                    
+                    <ul>
+                        <li>Creating and optimizing automation workflows</li>
+                        <li>Troubleshooting connection issues</li>
+                        <li>Generating response templates</li>
+                        <li>Understanding platform analytics</li>
+                        <li>Getting started with advanced features</li>
+                    </ul>
+                    
+                    <blockquote>
+                        "The new AI assistant has been a game-changer for our team. It helped us set up complex workflows in minutes that would have taken hours to configure manually." - Sarah Chen, Marketing Director at TechGlobal
+                    </blockquote>
+                    
+                    <h3>Redesigned User Interface</h3>
+                    
+                    <p>We've completely redesigned our user interface with a focus on simplicity and efficiency. The new UI features:</p>
+                    
+                    <ul>
+                        <li>A cleaner, more intuitive navigation system</li>
+                        <li>Drag-and-drop workflow builder</li>
+                        <li>Real-time analytics dashboard</li>
+                        <li>Dark mode support across the entire platform</li>
+                        <li>Improved mobile responsiveness</li>
+                    </ul>
+                    
+                    <p>The new interface maintains all the powerful features you love while making them more accessible and easier to use.</p>
+                    
+                    <h3>Advanced Workflow Capabilities</h3>
+                    
+                    <p>v2.3 introduces several new workflow capabilities that give you unprecedented control over your WhatsApp automation:</p>
+                    
+                    <ol>
+                        <li><strong>Conditional Responses:</strong> Create workflows that respond differently based on specific keywords or user inputs</li>
+                        <li><strong>Multi-Step Conversations:</strong> Design complex conversation flows that guide users through multiple steps</li>
+                        <li><strong>Integration with External APIs:</strong> Connect God's Zeal † Xmd with your existing CRM, database, or other business tools</li>
+                        <li><strong>Scheduled Messages:</strong> Automate messages to be sent at specific times or dates</li>
+                    </ol>
+                    
+                    <h2>Performance Improvements</h2>
+                    
+                    <p>Beyond the new features, we've made significant under-the-hood improvements:</p>
+                    
+                    <ul>
+                        <li>30% faster connection times</li>
+                        <li>Improved stability with reduced disconnects</li>
+                        <li>Optimized resource usage for better performance on all devices</li>
+                        <li>Enhanced security protocols for maximum data protection</li>
+                    </ul>
+                    
+                    <p>Our engineering team has been working tirelessly to ensure that God's Zeal † Xmd not only has the most features but also provides the most reliable experience in the market.</p>
+                    
+                    <h2>How to Get the Update</h2>
+                    
+                    <p>The v2.3 update is rolling out automatically to all users. If you don't see the new features immediately, simply log out and log back in to refresh your session.</p>
+                    
+                    <p>For developers interested in the technical details, check out our <a href="https://github.com/AiOfLautech/God-s-Zeal-Xmd" style="color: var(--primary);">GitHub repository</a> where we've updated our documentation with all the new API endpoints and features.</p>
+                    
+                    <h2>What's Coming Next</h2>
+                    
+                    <p>We're already working on v2.4, which will include:</p>
+                    
+                    <ul>
+                        <li>Team collaboration features</li>
+                        <li>Advanced analytics and reporting</li>
+                        <li>Custom integrations marketplace</li>
+                        <li>WhatsApp Business API support</li>
+                    </ul>
+                    
+                    <p>As always, we value your feedback. Let us know what you think of v2.3 and what features you'd like to see in future updates by reaching out through our <a href="contact.html" style="color: var(--primary);">contact page</a> or our <a href="https://github.com/AiOfLautech/God-s-Zeal-Xmd/discussions" style="color: var(--primary);">GitHub discussions</a>.</p>
+                    
+                    <p>Thank you for being part of the God's Zeal † Xmd community. We're committed to building the best WhatsApp automation platform possible, and your support makes it all worthwhile!</p>
+                </div>
+                
+                <div class="post-footer">
+                    <div class="post-tags">
+                        <span class="tag">Updates</span>
+                        <span class="tag">AI</span>
+                        <span class="tag">Release</span>
+                        <span class="tag">Automation</span>
+                        <span class="tag">WhatsApp</span>
+                    </div>
+                    
+                    <div class="post-sharing">
+                        <span class="sharing-label">Share this post:</span>
+                        <div class="sharing-links">
+                            <a href="#" class="sharing-link"><i class="fab fa-twitter"></i></a>
+                            <a href="#" class="sharing-link"><i class="fab fa-linkedin-in"></i></a>
+                            <a href="#" class="sharing-link"><i class="fab fa-facebook-f"></i></a>
+                            <a href="#" class="sharing-link"><i class="fab fa-reddit-alien"></i></a>
+                            <a href="#" class="sharing-link"><i class="fas fa-share-alt"></i></a>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="related-posts">
+                    <h3>You Might Also Like</h3>
+                    <div class="blog-grid">
+                        <article class="blog-card">
+                            <div class="blog-image">
+                                <i class="fas fa-book-open"></i>
+                            </div>
+                            <div class="blog-content">
+                                <span class="blog-category">Tutorials</span>
+                                <h3 class="blog-title">Setting Up Your First WhatsApp Automation Workflow in 5 Minutes</h3>
+                                <div class="blog-meta">
+                                    <div class="blog-author">
+                                        <div class="author-avatar">GD</div>
+                                        <span>God's Zeal AI</span>
+                                    </div>
+                                    <div class="blog-date">
+                                        <i class="far fa-calendar"></i> Nov 10, 2023
+                                    </div>
+                                </div>
+                                <a href="#blog-post" class="blog-read-more">Read More <i class="fas fa-arrow-right"></i></a>
+                            </div>
+                        </article>
+                        
+                        <article class="blog-card">
+                            <div class="blog-image">
+                                <i class="fas fa-chart-line"></i>
+                            </div>
+                            <div class="blog-content">
+                                <span class="blog-category">Case Studies</span>
+                                <h3 class="blog-title">How a Small Business Increased Customer Engagement by 75%</h3>
+                                <div class="blog-meta">
+                                    <div class="blog-author">
+                                        <div class="author-avatar">GD</div>
+                                        <span>God's Zeal AI</span>
+                                    </div>
+                                    <div class="blog-date">
+                                        <i class="far fa-calendar"></i> Nov 5, 2023
+                                    </div>
+                                </div>
+                                <a href="#blog-post" class="blog-read-more">Read More <i class="fas fa-arrow-right"></i></a>
+                            </div>
+                        </article>
+                    </div>
+                </div>
+            </article>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-column">
+                    <a href="index.html" class="logo" style="font-size: 2rem; margin-bottom: 1rem; display: inline-block;">
+                        <i class="fas fa-infinity"></i>
+                        God's <span>Zeal † Xmd</span>
+                    </a>
+                    <p style="color: var(--text-secondary); margin-bottom: 1.5rem;">The most advanced WhatsApp automation platform designed to streamline your communication and boost productivity.</p>
+                    <div class="social-links">
+                        <a href="https://github.com/AiOfLautech" class="social-link" target="_blank">
+                            <i class="fab fa-github"></i>
+                        </a>
+                        <a href="#" class="social-link">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                        <a href="#" class="social-link">
+                            <i class="fab fa-linkedin-in"></i>
+                        </a>
+                        <a href="#" class="social-link">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="footer-column">
+                    <h3>Quick Links</h3>
+                    <ul class="footer-links">
+                        <li><a href="index.html"><i class="fas fa-chevron-right"></i> Home</a></li>
+                        <li><a href="index.html#features"><i class="fas fa-chevron-right"></i> Features</a></li>
+                        <li><a href="index.html#how-it-works"><i class="fas fa-chevron-right"></i> How It Works</a></li>
+                        <li><a href="index.html#testimonials"><i class="fas fa-chevron-right"></i> Success Stories</a></li>
+                        <li><a href="ai.html"><i class="fas fa-chevron-right"></i> AI Assistant</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Resources</h3>
+                    <ul class="footer-links">
+                        <li><a href="privacy.html"><i class="fas fa-chevron-right"></i> Privacy Policy</a></li>
+                        <li><a href="terms.html"><i class="fas fa-chevron-right"></i> Terms of Service</a></li>
+                        <li><a href="contact.html"><i class="fas fa-chevron-right"></i> Contact Us</a></li>
+                        <li><a href="https://github.com/AiOfLautech/God-s-Zeal-Xmd" target="_blank"><i class="fab fa-github"></i> GitHub Repository</a></li>
+                        <li><a href="#"><i class="fas fa-chevron-right"></i> Documentation</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Get In Touch</h3>
+                    <ul class="footer-links">
+                        <li><a href="#"><i class="fas fa-envelope"></i> support@godszeal.tech</a></li>
+                        <li><a href="#"><i class="fas fa-phone"></i> + (234) 704-928-3499</a></li>
+                        <li><a href="#"><i class="fas fa-map-marker-alt"></i> 123 Innovation St, San Francisco, CA</a></li>
+                        <li><a href="#"><i class="fas fa-clock"></i> Mon-Fri: 9AM - 6PM</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 <span style="color: var(--primary);">God's Zeal † Xmd</span> by <a href="#">Godszeal Tech</a>. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Toast Container -->
+    <div class="toast-container"></div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Theme Toggle
+            const themeToggle = document.getElementById('themeToggle');
+            const themeToggleBall = document.querySelector('.theme-toggle-ball');
+            const htmlElement = document.documentElement;
+            
+            // Check for saved theme preference or respect OS preference
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDarkScheme = window.matchMedia('(prefers-color-scheme: dark)');
+            
+            if (savedTheme === 'dark' || (!savedTheme && prefersDarkScheme.matches)) {
+                htmlElement.classList.add('dark-mode');
+                themeToggleBall.style.left = 'calc(100% - 24px)';
+            }
+            
+            themeToggle.addEventListener('click', () => {
+                htmlElement.classList.toggle('dark-mode');
+                
+                if (htmlElement.classList.contains('dark-mode')) {
+                    localStorage.setItem('theme', 'dark');
+                    themeToggleBall.style.left = 'calc(100% - 24px)';
+                } else {
+                    localStorage.setItem('theme', 'light');
+                    themeToggleBall.style.left = '4px';
+                }
+            });
+
+            // Blog filters
+            const filterButtons = document.querySelectorAll('.filter-btn');
+            filterButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    // Update active button
+                    filterButtons.forEach(btn => btn.classList.remove('active'));
+                    button.classList.add('active');
+                    
+                    // In a real implementation, this would filter blog posts
+                    // For this demo, we'll just show a toast
+                    const filter = button.getAttribute('data-filter');
+                    showToast(`Showing ${filter === 'all' ? 'all' : filter} posts`, 'info');
+                });
+            });
+            
+            // Blog post navigation
+            const readMoreLinks = document.querySelectorAll('.blog-read-more');
+            const blogPostSection = document.getElementById('blog-post');
+            const blogSection = document.querySelector('.section');
+            
+            readMoreLinks.forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    
+                    // Hide blog listing
+                    blogSection.style.display = 'none';
+                    
+                    // Show blog post
+                    blogPostSection.style.display = 'block';
+                    blogPostSection.scrollIntoView({ behavior: 'smooth' });
+                    
+                    // Update page title
+                    document.title = "God's Zeal † Xmd - God's Zeal † Xmd v2.3 Released with Enhanced AI Capabilities";
+                });
+            });
+            
+            // Back to blog listing
+            const backButton = document.createElement('button');
+            backButton.innerHTML = '<i class="fas fa-arrow-left"></i> Back to Blog';
+            backButton.style.position = 'fixed';
+            backButton.style.bottom = '20px';
+            backButton.style.left = '20px';
+            backButton.style.padding = '10px 20px';
+            backButton.style.background = 'var(--primary)';
+            backButton.style.color = 'white';
+            backButton.style.border = 'none';
+            backButton.style.borderRadius = '30px';
+            backButton.style.cursor = 'pointer';
+            backButton.style.zIndex = '1000';
+            backButton.style.display = 'none';
+            backButton.style.transition = 'var(--transition)';
+            
+            document.body.appendChild(backButton);
+            
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 300) {
+                    backButton.style.display = 'block';
+                    backButton.style.opacity = '1';
+                } else {
+                    backButton.style.opacity = '0';
+                    setTimeout(() => {
+                        if (window.scrollY <= 300) {
+                            backButton.style.display = 'none';
+                        }
+                    }, 300);
+                }
+            });
+            
+            backButton.addEventListener('click', () => {
+                // Show blog listing
+                blogSection.style.display = 'block';
+                
+                // Hide blog post
+                blogPostSection.style.display = 'none';
+                
+                // Scroll to top
+                window.scrollTo({
+                    top: 0,
+                    behavior: 'smooth'
+                });
+                
+                // Update page title
+                document.title = "God's Zeal † Xmd - Blog";
+            });
+            
+            // Initialize animations
+            const animateOnScroll = () => {
+                const elements = document.querySelectorAll('.blog-card');
+                elements.forEach(element => {
+                    const elementPosition = element.getBoundingClientRect().top;
+                    const screenPosition = window.innerHeight / 1.3;
+                    
+                    if (elementPosition < screenPosition) {
+                        element.style.opacity = '1';
+                        element.style.transform = 'translateY(0)';
+                    }
+                });
+            };
+            
+            // Set initial state for animations
+            document.querySelectorAll('.blog-card').forEach(el => {
+                el.style.opacity = '0';
+                el.style.transform = 'translateY(20px)';
+                el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+            });
+            
+            window.addEventListener('scroll', animateOnScroll);
+            animateOnScroll(); // Check on initial load
+            
+            // Toast notifications
+            function showToast(message, type = 'info') {
+                const toast = document.createElement('div');
+                toast.className = `toast toast-${type}`;
+                toast.innerHTML = `<i class="fas fa-${type === 'success' ? 'check-circle' : type === 'error' ? 'exclamation-circle' : 'info-circle'}"></i> ${message}`;
+                
+                document.querySelector('.toast-container').appendChild(toast);
+                
+                setTimeout(() => {
+                    toast.remove();
+                }, 3000);
+            }
+        });
+    </script>
+</body>
+</html>
