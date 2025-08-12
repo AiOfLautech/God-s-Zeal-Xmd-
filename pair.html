@@ -508,6 +508,7 @@
     </style>
 </head>
 <body>
+    <div id="particles-js" style="position: absolute; width: 100%; height: 100%; top: 0; left: 0; z-index: 0; pointer-events: none;"></div>
     <!-- Background Elements -->
     <div class="bg-element bg-circle bg-circle-1"></div>
     <div class="bg-element bg-circle bg-circle-2"></div>
@@ -725,14 +726,17 @@
                     // Update button and input visibility
                     const submitBtn = document.getElementById('submit');
                     const inputGroup = document.getElementById('inputGroup');
+                    const copyBtn = document.getElementById('copy');
                     
                     if (mode === 'pair') {
                         submitBtn.innerHTML = '<i class="fas fa-key"></i> Generate Pair Code';
                         submitBtn.classList.remove('hidden');
                         inputGroup.classList.remove('hidden');
+                        copyBtn.style.display = '';
                     } else {
                         submitBtn.classList.add('hidden');
                         inputGroup.classList.add('hidden');
+                        copyBtn.style.display = 'none';
                         // Auto-generate QR code when QR mode is selected
                         generateQRCode();
                     }
@@ -803,7 +807,7 @@
                         codeDisplay.innerHTML = '<div class="error-message"><i class="fas fa-exclamation-circle"></i> Service Unavailable</div>';
                         showToast('Failed to generate pair code. Please try again.', 'error');
                     } else {
-                        codeDisplay.innerHTML = `<div class="success-message"><i class="fas fa-check-circle"></i> CODE: ${code}<br><span style="font-size: 14px; font-weight: normal;">Copy and enter this code in WhatsApp</span></div>`;
+                        codeDisplay.innerHTML = `<div class="success-message"><i class="fas fa-check-circle"></i> CODE: <span id="pairCode">${code}</span><br><span style="font-size: 14px; font-weight: normal;">Copy and enter this code in WhatsApp</span></div>`;
                         showToast('Pair code generated successfully!', 'success');
                     }
                     codeDisplay.style.display = 'flex';
@@ -819,11 +823,13 @@
             
             function copyCode() {
                 const codeDisplay = document.getElementById("codeDisplay");
-                let codeText = codeDisplay.innerText;
+                const pairCodeSpan = document.getElementById("pairCode");
+                let codeText;
                 
-                // Extract just the code part if it exists
-                if (codeText.includes('CODE:')) {
-                    codeText = codeText.split('CODE:')[1].trim();
+                if (pairCodeSpan) {
+                    codeText = pairCodeSpan.innerText;
+                } else {
+                    codeText = codeDisplay.innerText;
                 }
                 
                 navigator.clipboard.writeText(codeText).then(() => {
