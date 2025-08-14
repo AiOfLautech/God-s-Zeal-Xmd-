@@ -82,7 +82,7 @@ router.get('/', async (req, res) => {
                         // Send video thumbnail with caption
                         await KnightBot.sendMessage(userJid, {
                             image: { url: '' },
-                            caption: `🎬 *𝐆𝐎𝐃'𝐒 𝐙𝐄𝐀𝐋 𝐗𝐌𝐃 V2.0 Full Setup Guide!*\n\n🚀 Bug Fixes + New Commands + Fast AI Chat\n📺 Watch Now`
+                            caption: `🎬 *𝐆𝐎𝐃'𝐒 𝐙𝐄𝐀𝐋 𝐗𝐌𝐃 V2.0 Full Setup Guide!*\n\n🚀 Bug Fixes + New Commands + Fast AI Chat\n📺 Watch Now: https://youtu.be/U5Rjh3hTF8s?si=tXIJJsbvFxn7NbrW`
                         });
                         console.log("🎬 Video guide sent successfully");
 
