@@ -6,6 +6,7 @@ import { fileURLToPath } from 'url';
 import path from 'path';
 import dotenv from 'dotenv';
 import cron from 'node-cron';
+import helmet from 'helmet';
 
 dotenv.config();
 
@@ -21,6 +22,7 @@ import authService from './src/services/authService.js';
 import prisma from './src/config/database.js';
 import websocketService from './src/services/websocketService.js';
 import { createServer } from 'http';
+import { loginLimiter, apiLimiter, pairingLimiter } from './src/middleware/rateLimiter.js';
 
 const app = express();
 const server = createServer(app);
@@ -35,6 +37,12 @@ import('events').then(events => {
 });
 
 const SQLiteSessionStore = SQLiteStore(session);
+
+// Security middleware
+app.use(helmet({
+    contentSecurityPolicy: false, // Allow inline scripts for dynamic content
+    crossOriginEmbedderPolicy: false
+}));
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -70,13 +78,14 @@ app.get('/', (req, res) => {
 
 import { isAuthenticated } from './src/middleware/auth.js';
 
-app.use('/auth', authRouter);
-app.use('/api/bots', isAuthenticated, botsRouter);
-app.use('/api/admin', adminRouter);
-app.use('/api/github', isAuthenticated, githubRouter);
-app.use('/api/pairing', isAuthenticated, pairingRouter);
-app.use('/pair', isAuthenticated, pairRouter);
-app.use('/qr', isAuthenticated, qrRouter);
+// Apply rate limiting and authentication
+app.use('/auth', loginLimiter, authRouter);
+app.use('/api/bots', apiLimiter, isAuthenticated, botsRouter);
+app.use('/api/admin', apiLimiter, adminRouter);
+app.use('/api/github', apiLimiter, isAuthenticated, githubRouter);
+app.use('/api/pairing', pairingLimiter, isAuthenticated, pairingRouter);
+app.use('/pair', pairingLimiter, isAuthenticated, pairRouter);
+app.use('/qr', pairingLimiter, isAuthenticated, qrRouter);
 
 app.get('/health', (req, res) => {
     res.json({ status: 'ok', timestamp: new Date().toISOString() });

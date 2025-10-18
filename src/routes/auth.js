@@ -1,10 +1,11 @@
 import express from 'express';
 import passport from '../config/passport.js';
 import authService from '../services/authService.js';
+import { registerValidation, loginValidation } from '../middleware/validation.js';
 
 const router = express.Router();
 
-router.post('/register', async (req, res) => {
+router.post('/register', registerValidation, async (req, res) => {
     try {
         const { username, email, password } = req.body;
 
@@ -32,7 +33,7 @@ router.post('/register', async (req, res) => {
     }
 });
 
-router.post('/login', (req, res, next) => {
+router.post('/login', loginValidation, (req, res, next) => {
     passport.authenticate('local', (err, user, info) => {
         if (err) {
             return res.status(500).json({ error: 'Login error' });
