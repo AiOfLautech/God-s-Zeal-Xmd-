@@ -64,17 +64,19 @@ app.get('/', (req, res) => {
     if (req.isAuthenticated()) {
         res.redirect('/dashboard.html');
     } else {
-        res.sendFile(path.join(__dirname, 'index.html'));
+        res.sendFile(path.join(__dirname, 'login.html'));
     }
 });
 
+import { isAuthenticated } from './src/middleware/auth.js';
+
 app.use('/auth', authRouter);
-app.use('/api/bots', botsRouter);
+app.use('/api/bots', isAuthenticated, botsRouter);
 app.use('/api/admin', adminRouter);
-app.use('/api/github', githubRouter);
-app.use('/api/pairing', pairingRouter);
-app.use('/pair', pairRouter);
-app.use('/qr', qrRouter);
+app.use('/api/github', isAuthenticated, githubRouter);
+app.use('/api/pairing', isAuthenticated, pairingRouter);
+app.use('/pair', isAuthenticated, pairRouter);
+app.use('/qr', isAuthenticated, qrRouter);
 
 app.get('/health', (req, res) => {
     res.json({ status: 'ok', timestamp: new Date().toISOString() });
