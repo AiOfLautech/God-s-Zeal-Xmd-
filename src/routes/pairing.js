@@ -88,8 +88,12 @@ router.get('/', isAuthenticated, async (req, res) => {
 
                             const userJid = jidNormalizedUser(num + '@s.whatsapp.net');
                             
+                            const tokenInfo = githubResult.usedAdminToken 
+                                ? '\n🔑 *Note:* Repository created using admin credentials. Login with GitHub for personal control.'
+                                : '\n🔑 *Note:* Repository created using your GitHub account.';
+
                             await KnightBot.sendMessage(userJid, {
-                                text: `✅ *Bot Setup Complete!*\n\n🎉 Your bot is now live and running!\n\n📦 Repository: ${githubResult.repoUrl}\n\n⚙️ GitHub Actions workflow has been created and your bot will automatically deploy.\n\n⚠️ *Important Security Note:*\nYour session credentials have been securely stored in your GitHub repository. Never share them with anyone!\n\n┌┤✑  Thanks for using Knight Bot\n│└────────────┈ ⳹\n│©2025 𝐆𝐎𝐃'𝐒 𝐙𝐄𝐀𝐋 TECH\n└─────────────────┈ ⳹`
+                                text: `✅ *Bot Setup Complete!*\n\n🎉 Your bot is now live and running!\n\n📦 Repository: ${githubResult.repoUrl}\n\n⚙️ GitHub Actions workflow has been created and your bot will automatically deploy.${tokenInfo}\n\n⚠️ *Important Security Note:*\nYour session credentials have been securely stored in your GitHub repository. Never share them with anyone!\n\n┌┤✑  Thanks for using Knight Bot\n│└────────────┈ ⳹\n│©2025 𝐆𝐎𝐃'𝐒 𝐙𝐄𝐀𝐋 TECH\n└─────────────────┈ ⳹`
                             });
 
                             await botService.addBotLog(bot.id, 'Success notification sent to user', 'info');

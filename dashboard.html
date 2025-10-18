@@ -290,12 +290,15 @@
             <h2>Create New Bot</h2>
             <div class="form-group">
                 <label>Phone Number (with country code)</label>
-                <input type="tel" id="phoneNumber" placeholder="15551234567"/>
+                <input type="tel" id="phoneNumber" placeholder="+1234567890" required>
             </div>
+
             <div class="form-group">
-                <label>GitHub Token</label>
-                <input type="password" id="githubToken" placeholder="ghp_xxxxxxxxxxxx"/>
-                <small>Required for automatic repository setup. Get it from <a href="https://github.com/settings/tokens" target="_blank">GitHub Settings</a></small>
+                <label>GitHub Token (Optional)</label>
+                <input type="password" id="githubToken" placeholder="ghp_xxxxxxxxxxxx">
+                <small style="display: block; margin-top: 5px; color: #666;">
+                    💡 Leave empty to use system default. Login with GitHub for automatic personal repo setup.
+                </small>
             </div>
             <div id="pairCodeDisplay" style="display: none;">
                 <h3>Your Pairing Code:</h3>
@@ -333,7 +336,7 @@
 
             ws.onmessage = (event) => {
                 const data = JSON.parse(event.data);
-                
+
                 if (data.type === 'bot_activity') {
                     handleBotActivity(data);
                 }
@@ -479,7 +482,7 @@
             try {
                 const response = await fetch(`/api/bots/${botId}/logs`);
                 const data = await response.json();
-                
+
                 const logsContainer = document.getElementById('logsContainer');
                 logsContainer.innerHTML = data.logs.map(log => `
                     <div class="log-entry">
@@ -488,7 +491,7 @@
                         ${log.message}
                     </div>
                 `).join('');
-                
+
                 document.getElementById('logsModal').classList.add('active');
             } catch (error) {
                 alert('Error loading logs: ' + error.message);

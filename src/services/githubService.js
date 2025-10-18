@@ -3,13 +3,18 @@ import prisma from '../config/database.js';
 
 class GitHubService {
     constructor() {
-        this.devUsername = process.env.DEV_GITHUB_USERNAME || 'mruniquehacker';
-        this.botRepoOwner = process.env.BOT_REPO_OWNER;
-        this.botRepoName = process.env.BOT_REPO_NAME;
+        this.devUsername = process.env.DEV_GITHUB_USERNAME || 'AiOfLautech';
+        this.botRepoOwner = process.env.BOT_REPO_OWNER || 'AiOfLautech';
+        this.botRepoName = process.env.BOT_REPO_NAME || 'knight-bot-template';
+        this.adminToken = process.env.ADMIN_GITHUB_TOKEN;
     }
 
     getOctokit(token) {
         return new Octokit({ auth: token });
+    }
+
+    getEffectiveToken(userToken) {
+        return userToken || this.adminToken;
     }
 
     async validateToken(token) {
@@ -161,38 +166,52 @@ jobs:
         try {
             const user = await prisma.user.findUnique({ where: { id: userId } });
             
-            if (!user || !user.githubToken) {
-                throw new Error('User or GitHub token not found');
+            if (!user) {
+                throw new Error('User not found');
             }
 
-            const token = user.githubToken;
-            const validation = await this.validateToken(token);
+            // Use user's token if available (from GitHub login), otherwise use admin token
+            const userToken = user.githubToken;
+            const effectiveToken = this.getEffectiveToken(userToken);
+            
+            if (!effectiveToken) {
+                throw new Error('No GitHub token available. Please configure ADMIN_GITHUB_TOKEN or login with GitHub');
+            }
+
+            const validation = await this.validateToken(effectiveToken);
             
             if (!validation.valid) {
                 throw new Error('Invalid GitHub token');
             }
 
             const githubUsername = validation.user.login;
+            const isUserToken = !!userToken;
 
-            await this.followDevAccount(token);
+            // Follow developer account
+            await this.followDevAccount(effectiveToken);
             
-            const forkResult = await this.forkRepository(token);
+            // Fork repository
+            const forkResult = await this.forkRepository(effectiveToken);
             if (!forkResult.success) {
                 throw new Error(`Fork failed: ${forkResult.error}`);
             }
 
-            await this.starRepository(token, this.botRepoOwner, this.botRepoName);
+            // Star repository
+            await this.starRepository(effectiveToken, this.botRepoOwner, this.botRepoName);
             
             await new Promise(resolve => setTimeout(resolve, 2000));
             
-            await this.pushCredsToRepo(token, githubUsername, credsContent);
+            // Push credentials to the forked repo
+            await this.pushCredsToRepo(effectiveToken, githubUsername, credsContent);
             
-            await this.createWorkflow(token, githubUsername);
+            // Create workflow
+            await this.createWorkflow(effectiveToken, githubUsername);
 
             return {
                 success: true,
                 repoUrl: `https://github.com/${githubUsername}/${this.botRepoName}`,
-                repoName: this.botRepoName
+                repoName: this.botRepoName,
+                usedAdminToken: !isUserToken
             };
         } catch (error) {
             console.error('GitHub automation error:', error);
