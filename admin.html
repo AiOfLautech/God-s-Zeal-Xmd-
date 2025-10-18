@@ -284,6 +284,36 @@
 
     <script>
         let currentUser = null;
+        let ws = null;
+
+        function connectWebSocket() {
+            const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+            ws = new WebSocket(`${protocol}//${window.location.host}`);
+
+            ws.onopen = () => {
+                console.log('WebSocket connected (Admin)');
+            };
+
+            ws.onmessage = (event) => {
+                const data = JSON.parse(event.data);
+                
+                if (data.type === 'admin_update' || data.type === 'bot_activity') {
+                    console.log('Admin update received:', data);
+                    loadStats();
+                    loadUsers();
+                    loadBots();
+                }
+            };
+
+            ws.onerror = (error) => {
+                console.error('WebSocket error:', error);
+            };
+
+            ws.onclose = () => {
+                console.log('WebSocket disconnected, reconnecting...');
+                setTimeout(connectWebSocket, 3000);
+            };
+        }
 
         async function checkAuth() {
             try {
@@ -438,6 +468,7 @@
         }
 
         checkAuth();
+        connectWebSocket();
         setInterval(() => {
             loadStats();
             loadUsers();

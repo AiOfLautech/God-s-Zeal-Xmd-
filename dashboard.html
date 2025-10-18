@@ -321,6 +321,55 @@
 
     <script>
         let currentUser = null;
+        let ws = null;
+
+        function connectWebSocket() {
+            const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+            ws = new WebSocket(`${protocol}//${window.location.host}`);
+
+            ws.onopen = () => {
+                console.log('WebSocket connected');
+            };
+
+            ws.onmessage = (event) => {
+                const data = JSON.parse(event.data);
+                
+                if (data.type === 'bot_activity') {
+                    handleBotActivity(data);
+                }
+            };
+
+            ws.onerror = (error) => {
+                console.error('WebSocket error:', error);
+            };
+
+            ws.onclose = () => {
+                console.log('WebSocket disconnected, reconnecting...');
+                setTimeout(connectWebSocket, 3000);
+            };
+        }
+
+        function handleBotActivity(data) {
+            if (data.activity.type === 'status_change') {
+                console.log('Bot status changed:', data.activity);
+                loadBots();
+            } else if (data.activity.type === 'log') {
+                console.log('New bot log:', data.activity.log);
+                // Update logs if modal is open
+                const logsModal = document.getElementById('logsModal');
+                if (logsModal.classList.contains('active')) {
+                    const logsContainer = document.getElementById('logsContainer');
+                    const logEntry = document.createElement('div');
+                    logEntry.className = 'log-entry';
+                    logEntry.innerHTML = `
+                        <span style="color: #74b9ff;">[${new Date(data.activity.log.createdAt).toLocaleString()}]</span>
+                        <span style="color: ${data.activity.log.level === 'error' ? '#ff7675' : data.activity.log.level === 'success' ? '#00b894' : '#dfe6e9'};">[${data.activity.log.level}]</span>
+                        ${data.activity.log.message}
+                    `;
+                    logsContainer.insertBefore(logEntry, logsContainer.firstChild);
+                }
+            }
+        }
 
         async function checkAuth() {
             try {
@@ -485,6 +534,7 @@
         }
 
         checkAuth();
+        connectWebSocket();
         setInterval(loadBots, 30000);
     </script>
 </body>

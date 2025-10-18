@@ -19,8 +19,11 @@ import adminRouter from './src/routes/admin.js';
 import githubRouter from './src/routes/github.js';
 import authService from './src/services/authService.js';
 import prisma from './src/config/database.js';
+import websocketService from './src/services/websocketService.js';
+import { createServer } from 'http';
 
 const app = express();
+const server = createServer(app);
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -101,12 +104,14 @@ async function createAdminUser() {
     }
 }
 
-app.listen(PORT, '0.0.0.0', async () => {
+server.listen(PORT, '0.0.0.0', async () => {
     console.log(`\n🚀 Knight Bot Server`);
     console.log(`📺 YouTube: @mr_unique_hacker`);
     console.log(`💻 GitHub: @mruniquehacker`);
-    console.log(`🌐 Server running on http://0.0.0.0:${PORT}\n`);
+    console.log(`🌐 Server running on http://0.0.0.0:${PORT}`);
+    console.log(`🔌 WebSocket server initialized\n`);
     
+    websocketService.initialize(server);
     await createAdminUser();
 });
 

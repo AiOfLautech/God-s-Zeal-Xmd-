@@ -1,5 +1,6 @@
 import prisma from '../config/database.js';
 import { v4 as uuidv4 } from 'uuid';
+import websocketService from './websocketService.js';
 
 class BotService {
     async createBot(userId, phoneNumber) {
@@ -64,10 +65,22 @@ class BotService {
     }
 
     async updateBot(botId, data) {
-        return await prisma.bot.update({
+        const bot = await prisma.bot.update({
             where: { id: botId },
             data
         });
+
+        // Notify status change via WebSocket
+        if (data.status) {
+            websocketService.notifyBotStatusChange(
+                bot.userId,
+                botId,
+                data.status,
+                `Bot status changed to ${data.status}`
+            );
+        }
+
+        return bot;
     }
 
     async deleteBot(botId) {
@@ -77,13 +90,21 @@ class BotService {
     }
 
     async addBotLog(botId, message, level = 'info') {
-        return await prisma.botLog.create({
+        const log = await prisma.botLog.create({
             data: {
                 botId,
                 message,
                 level
             }
         });
+
+        // Notify via WebSocket
+        const bot = await prisma.bot.findUnique({ where: { id: botId } });
+        if (bot) {
+            websocketService.notifyBotLog(bot.userId, botId, log);
+        }
+
+        return log;
     }
 
     async getBotLogs(botId, limit = 100) {

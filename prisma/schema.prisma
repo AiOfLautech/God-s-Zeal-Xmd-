@@ -29,6 +29,7 @@ model Bot {
   githubRepoUrl   String?
   githubRepoName  String?
   workflowStatus  String    @default("not_created")
+  lastActivity    DateTime  @default(now())
   createdAt       DateTime  @default(now())
   updatedAt       DateTime  @updatedAt
   logs            BotLog[]
