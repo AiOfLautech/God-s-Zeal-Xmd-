@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Admin Dashboard - Knight Bot</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: #f5f7fa;
+            color: #2d3436;
+        }
+
+        .navbar {
+            background: linear-gradient(135deg, #6c5ce7, #00cec9);
+            padding: 1rem 2rem;
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .navbar h1 {
+            font-size: 1.5rem;
+        }
+
+        .navbar .user-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .btn {
+            padding: 0.6rem 1.2rem;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+
+        .btn-primary {
+            background: #6c5ce7;
+            color: white;
+        }
+
+        .btn-danger {
+            background: #ff7675;
+            color: white;
+        }
+
+        .btn-warning {
+            background: #fdcb6e;
+            color: white;
+        }
+
+        .btn-logout {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: 1px solid white;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .stat-card h3 {
+            font-size: 0.9rem;
+            color: #636e72;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-card .value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #6c5ce7;
+        }
+
+        .card {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .card h2 {
+            font-size: 1.3rem;
+            color: #2d3436;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        th {
+            background: #f8f9fa;
+            font-weight: 600;
+            color: #636e72;
+        }
+
+        .status {
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+
+        .status-running {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .status-pending {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .status-error {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .tab {
+            padding: 0.8rem 1.5rem;
+            background: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+
+        .tab.active {
+            background: #6c5ce7;
+            color: white;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <h1><i class="fas fa-shield-alt"></i> Admin Dashboard</h1>
+        <div class="user-info">
+            <span id="username">Admin</span>
+            <a href="/dashboard.html" class="btn btn-primary">User Dashboard</a>
+            <button class="btn btn-logout" onclick="logout()">
+                <i class="fas fa-sign-out-alt"></i> Logout
+            </button>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="stats-grid">
+            <div class="stat-card">
+                <h3>Total Users</h3>
+                <div class="value" id="totalUsers">0</div>
+            </div>
+            <div class="stat-card">
+                <h3>Total Bots</h3>
+                <div class="value" id="totalBots">0</div>
+            </div>
+            <div class="stat-card">
+                <h3>Active Bots</h3>
+                <div class="value" id="activeBots">0</div>
+            </div>
+        </div>
+
+        <div class="tabs">
+            <button class="tab active" onclick="switchTab('users')">Users</button>
+            <button class="tab" onclick="switchTab('bots')">All Bots</button>
+        </div>
+
+        <div id="users-tab" class="tab-content active">
+            <div class="card">
+                <div class="card-header">
+                    <h2>All Users</h2>
+                </div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Username</th>
+                            <th>Email</th>
+                            <th>Role</th>
+                            <th>Bots</th>
+                            <th>Joined</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="usersTableBody">
+                        <tr>
+                            <td colspan="6" style="text-align: center;">Loading...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div id="bots-tab" class="tab-content">
+            <div class="card">
+                <div class="card-header">
+                    <h2>All Bots</h2>
+                    <button class="btn btn-warning" onclick="restartAllBots()">
+                        <i class="fas fa-sync"></i> Restart All Bots
+                    </button>
+                </div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>User</th>
+                            <th>Phone Number</th>
+                            <th>Status</th>
+                            <th>GitHub Repo</th>
+                            <th>Created</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="botsTableBody">
+                        <tr>
+                            <td colspan="6" style="text-align: center;">Loading...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentUser = null;
+
+        async function checkAuth() {
+            try {
+                const response = await fetch('/auth/me');
+                if (!response.ok) {
+                    window.location.href = '/login.html';
+                    return;
+                }
+                const data = await response.json();
+                currentUser = data.user;
+                
+                if (currentUser.role !== 'admin') {
+                    window.location.href = '/dashboard.html';
+                    return;
+                }
+                
+                document.getElementById('username').textContent = currentUser.username;
+                loadStats();
+                loadUsers();
+                loadBots();
+            } catch (error) {
+                window.location.href = '/login.html';
+            }
+        }
+
+        async function loadStats() {
+            try {
+                const response = await fetch('/api/admin/stats');
+                const data = await response.json();
+                document.getElementById('totalUsers').textContent = data.stats.totalUsers;
+                document.getElementById('totalBots').textContent = data.stats.totalBots;
+                document.getElementById('activeBots').textContent = data.stats.activeBots;
+            } catch (error) {
+                console.error('Error loading stats:', error);
+            }
+        }
+
+        async function loadUsers() {
+            try {
+                const response = await fetch('/api/admin/users');
+                const data = await response.json();
+                
+                const tbody = document.getElementById('usersTableBody');
+                tbody.innerHTML = data.users.map(user => `
+                    <tr>
+                        <td>${user.username}</td>
+                        <td>${user.email}</td>
+                        <td><span class="status">${user.role}</span></td>
+                        <td>${user._count.bots}</td>
+                        <td>${new Date(user.createdAt).toLocaleDateString()}</td>
+                        <td class="actions">
+                            ${user.role !== 'admin' ? `<button class="btn btn-danger" onclick="deleteUser('${user.id}')"><i class="fas fa-trash"></i></button>` : ''}
+                        </td>
+                    </tr>
+                `).join('');
+            } catch (error) {
+                console.error('Error loading users:', error);
+            }
+        }
+
+        async function loadBots() {
+            try {
+                const response = await fetch('/api/admin/bots');
+                const data = await response.json();
+                
+                const tbody = document.getElementById('botsTableBody');
+                tbody.innerHTML = data.bots.map(bot => `
+                    <tr>
+                        <td>${bot.user.username}</td>
+                        <td>${bot.phoneNumber}</td>
+                        <td><span class="status status-${bot.status}">${bot.status}</span></td>
+                        <td>${bot.githubRepoUrl ? `<a href="${bot.githubRepoUrl}" target="_blank">${bot.githubRepoName}</a>` : '-'}</td>
+                        <td>${new Date(bot.createdAt).toLocaleDateString()}</td>
+                        <td class="actions">
+                            <button class="btn btn-warning" onclick="restartBot('${bot.id}')"><i class="fas fa-sync"></i></button>
+                            <button class="btn btn-danger" onclick="deleteBot('${bot.id}')"><i class="fas fa-trash"></i></button>
+                        </td>
+                    </tr>
+                `).join('');
+            } catch (error) {
+                console.error('Error loading bots:', error);
+            }
+        }
+
+        function switchTab(tab) {
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+            
+            event.target.classList.add('active');
+            document.getElementById(`${tab}-tab`).classList.add('active');
+        }
+
+        async function deleteUser(userId) {
+            if (!confirm('Are you sure you want to delete this user? All their bots will also be deleted.')) return;
+
+            try {
+                await fetch(`/api/admin/users/${userId}`, { method: 'DELETE' });
+                alert('User deleted successfully');
+                loadUsers();
+                loadStats();
+            } catch (error) {
+                alert('Error deleting user: ' + error.message);
+            }
+        }
+
+        async function restartBot(botId) {
+            if (!confirm('Are you sure you want to restart this bot?')) return;
+
+            try {
+                const response = await fetch(`/api/bots/${botId}/restart`, { method: 'POST' });
+                const data = await response.json();
+                alert(data.message);
+                loadBots();
+            } catch (error) {
+                alert('Error restarting bot: ' + error.message);
+            }
+        }
+
+        async function deleteBot(botId) {
+            if (!confirm('Are you sure you want to delete this bot?')) return;
+
+            try {
+                await fetch(`/api/bots/${botId}`, { method: 'DELETE' });
+                alert('Bot deleted successfully');
+                loadBots();
+                loadStats();
+            } catch (error) {
+                alert('Error deleting bot: ' + error.message);
+            }
+        }
+
+        async function restartAllBots() {
+            if (!confirm('Are you sure you want to restart ALL bots? This may take some time.')) return;
+
+            try {
+                const response = await fetch('/api/admin/bots/restart-all', { method: 'POST' });
+                const data = await response.json();
+                alert(data.message);
+                loadBots();
+            } catch (error) {
+                alert('Error restarting bots: ' + error.message);
+            }
+        }
+
+        async function logout() {
+            try {
+                await fetch('/auth/logout', { method: 'POST' });
+                window.location.href = '/login.html';
+            } catch (error) {
+                console.error('Logout error:', error);
+            }
+        }
+
+        checkAuth();
+        setInterval(() => {
+            loadStats();
+            loadUsers();
+            loadBots();
+        }, 30000);
+    </script>
+</body>
+</html>

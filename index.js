@@ -11,10 +11,12 @@ dotenv.config();
 
 import passport from './src/config/passport.js';
 import pairRouter from './pair.js';
+import pairingRouter from './src/routes/pairing.js';
 import qrRouter from './qr.js';
 import authRouter from './src/routes/auth.js';
 import botsRouter from './src/routes/bots.js';
 import adminRouter from './src/routes/admin.js';
+import githubRouter from './src/routes/github.js';
 import authService from './src/services/authService.js';
 import prisma from './src/config/database.js';
 
@@ -66,6 +68,8 @@ app.get('/', (req, res) => {
 app.use('/auth', authRouter);
 app.use('/api/bots', botsRouter);
 app.use('/api/admin', adminRouter);
+app.use('/api/github', githubRouter);
+app.use('/api/pairing', pairingRouter);
 app.use('/pair', pairRouter);
 app.use('/qr', qrRouter);
 

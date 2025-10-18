@@ -25,6 +25,9 @@ build/
 # Session files
 session*
 qr_sessions/
+sessions.db
+prisma/dev.db
+prisma/sessions.db
 
 # Temporary files
 tmp/
