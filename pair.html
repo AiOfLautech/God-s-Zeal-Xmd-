@@ -490,17 +490,17 @@
                 border-radius: 12px;
                 max-width: 400px;
             }
-            
+
             .code-display {
                 font-size: 16px;
                 min-height: 50px;
             }
-            
+
             .qr-image {
                 max-width: 240px;
                 max-height: 240px;
             }
-            
+
             .qr-display {
                 padding: 20px;
             }
@@ -512,7 +512,7 @@
     <!-- Background Elements -->
     <div class="bg-element bg-circle bg-circle-1"></div>
     <div class="bg-element bg-circle bg-circle-2"></div>
-    
+
     <!-- Theme Toggle -->
     <div class="theme-toggle" id="themeToggle">
         <div class="theme-toggle-ball"></div>
@@ -541,7 +541,7 @@
                     </a>
                 </div>
             </div>
-            
+
             <!-- Toggle Switch -->
             <div class="toggle-container">
                 <div class="toggle-option active" data-mode="pair">
@@ -551,35 +551,35 @@
                     <i class="fas fa-qrcode"></i> QR Code
                 </div>
             </div>
-            
+
             <div class="input-group" id="inputGroup">
                 <label class="input-label">Enter your WhatsApp number with country code</label>
                 <input type="text" id="mobileNumber" class="input-field" placeholder="+15551234567" pattern="[+][0-9]{10,}" title="Please enter country code starting with + followed by number">
             </div>
-            
+
             <button class="generate-btn" id="submit">
                 <i class="fas fa-key"></i> Generate Pair Code
             </button>
-            
+
             <div class="loading" id="loading">
                 <i class="fas fa-spinner"></i>
             </div>
-            
+
             <div class="code-display" id="codeDisplay">
                 Your pair code will appear here
             </div>
-            
+
             <div class="qr-display" id="qrDisplay">
                 <img id="qrImage" class="qr-image" src="" alt="QR Code">
                 <div class="qr-instructions" id="qrInstructions">
                     Scan this QR code with your WhatsApp app
                 </div>
             </div>
-            
+
             <button class="copy-btn" id="copy" onclick="copyCode()">
                 <i class="fas fa-copy"></i> Copy Code
             </button>
-            
+
             <div class="footer">
                 <p>© 2025 Godszeal Tech | God's Zeal † Xmd</p>
             </div>
@@ -608,26 +608,25 @@
 
         document.addEventListener('DOMContentLoaded', async function() {
             // Check authentication first
-            const isAuthenticated = await checkAuth();
-            if (!isAuthenticated) return;
+            checkAuth();
 
             // Theme Toggle
             const themeToggle = document.getElementById('themeToggle');
             const themeToggleBall = document.querySelector('.theme-toggle-ball');
             const htmlElement = document.documentElement;
-            
+
             // Check for saved theme preference or respect OS preference
             const savedTheme = localStorage.getItem('theme');
             const prefersDarkScheme = window.matchMedia('(prefers-color-scheme: dark)');
-            
+
             if (savedTheme === 'dark' || (!savedTheme && prefersDarkScheme.matches)) {
                 htmlElement.classList.add('dark-mode');
                 themeToggleBall.style.left = 'calc(100% - 24px)';
             }
-            
+
             themeToggle.addEventListener('click', () => {
                 htmlElement.classList.toggle('dark-mode');
-                
+
                 if (htmlElement.classList.contains('dark-mode')) {
                     localStorage.setItem('theme', 'dark');
                     themeToggleBall.style.left = 'calc(100% - 24px)';
@@ -732,20 +731,20 @@
                 option.addEventListener('click', function() {
                     const mode = this.dataset.mode;
                     if (mode === currentMode) return;
-                    
+
                     // Update active state
                     document.querySelectorAll('.toggle-option').forEach(opt => 
                         opt.classList.remove('active'));
                     this.classList.add('active');
-                    
+
                     // Update mode
                     currentMode = mode;
-                    
+
                     // Update button and input visibility
                     const submitBtn = document.getElementById('submit');
                     const inputGroup = document.getElementById('inputGroup');
                     const copyBtn = document.getElementById('copy');
-                    
+
                     if (mode === 'pair') {
                         submitBtn.innerHTML = '<i class="fas fa-key"></i> Generate Pair Code';
                         submitBtn.classList.remove('hidden');
@@ -758,28 +757,28 @@
                         // Auto-generate QR code when QR mode is selected
                         generateQRCode();
                     }
-                    
+
                     // Clear displays
                     document.getElementById('codeDisplay').innerHTML = 'Your pair code will appear here';
                     document.getElementById('qrDisplay').style.display = 'none';
                     document.getElementById('codeDisplay').style.display = 'flex';
                 });
             });
-            
+
             let currentMode = 'pair';
-            
+
             async function generateQRCode() {
                 const codeDisplay = document.getElementById("codeDisplay");
                 const qrDisplay = document.getElementById("qrDisplay");
                 const loadingSpinner = document.getElementById("loading");
-                
+
                 loadingSpinner.style.display = "block";
                 codeDisplay.innerHTML = '';
                 qrDisplay.style.display = 'none';
-                
+
                 try {
                     const response = await axios('/qr');
-                    
+
                     if (response.data.qr) {
                         document.getElementById('qrImage').src = response.data.qr;
                         document.getElementById('qrInstructions').innerHTML = response.data.instructions.join('<br>');
@@ -797,29 +796,29 @@
                     loadingSpinner.style.display = "none";
                 }
             }
-            
+
             document.getElementById("submit").addEventListener("click", async (e) => {
                 e.preventDefault();
-                
+
                 const mobileNumberInput = document.getElementById("mobileNumber");
                 const codeDisplay = document.getElementById("codeDisplay");
                 const qrDisplay = document.getElementById("qrDisplay");
                 const loadingSpinner = document.getElementById("loading");
-                
+
                 const mobileNumber = mobileNumberInput.value.trim();
                 if (!mobileNumber) {
                     showToast('Please enter your WhatsApp number', 'error');
                     codeDisplay.innerHTML = '<div class="error-message"><i class="fas fa-exclamation-circle"></i> Please enter your WhatsApp number</div>';
                     return;
                 }
-                
+
                 loadingSpinner.style.display = "block";
                 codeDisplay.innerHTML = '';
                 qrDisplay.style.display = 'none';
-                
+
                 try {
                     const response = await axios(`/pair?number=${mobileNumber.replace(/[^0-9]/g, "")}`);
-                    
+
                     const code = response.data.code || "Service Unavailable";
                     if (code === "Service Unavailable") {
                         codeDisplay.innerHTML = '<div class="error-message"><i class="fas fa-exclamation-circle"></i> Service Unavailable</div>';
@@ -838,25 +837,25 @@
                     loadingSpinner.style.display = "none";
                 }
             });
-            
+
             function copyCode() {
                 const codeDisplay = document.getElementById("codeDisplay");
                 const pairCodeSpan = document.getElementById("pairCode");
                 let codeText;
-                
+
                 if (pairCodeSpan) {
                     codeText = pairCodeSpan.innerText;
                 } else {
                     codeText = codeDisplay.innerText;
                 }
-                
+
                 navigator.clipboard.writeText(codeText).then(() => {
                     const copyBtn = document.getElementById("copy");
                     const originalText = copyBtn.innerHTML;
                     copyBtn.innerHTML = '<i class="fas fa-check"></i> Copied!';
-                    
+
                     showToast('Code copied to clipboard!', 'success');
-                    
+
                     setTimeout(() => {
                         copyBtn.innerHTML = originalText;
                     }, 2000);
@@ -865,7 +864,7 @@
                     showToast('Failed to copy code. Please try again.', 'error');
                 });
             }
-            
+
             // Toast notifications
             function showToast(message, type = 'info') {
                 const toastContainer = document.querySelector('.toast-container');
@@ -875,41 +874,18 @@
                     container.className = 'toast-container';
                     document.body.appendChild(container);
                 }
-                
+
                 const toast = document.createElement('div');
                 toast.className = `toast toast-${type}`;
                 toast.innerHTML = `<i class="fas fa-${type === 'success' ? 'check-circle' : type === 'error' ? 'exclamation-circle' : 'info-circle'}"></i> ${message}`;
-                
+
                 document.querySelector('.toast-container').appendChild(toast);
-                
+
                 setTimeout(() => {
                     toast.remove();
                 }, 3000);
             }
-            
-            // Initialize animations
-            document.querySelectorAll('.animate').forEach(el => {
-                el.style.opacity = '0';
-                el.style.transform = 'translateY(20px)';
-            });
-            
-            // Intersection Observer for scroll animations
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        entry.target.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
-                        entry.target.style.opacity = '1';
-                        entry.target.style.transform = 'translateY(0)';
-                    }
-                });
-            }, {
-                threshold: 0.1
-            });
-            
-            document.querySelectorAll('.animate').forEach(el => {
-                observer.observe(el);
-            });
-            
+
             // Initial animations
             setTimeout(() => {
                 document.querySelector('.logo').style.animation = 'shine 3s infinite';
