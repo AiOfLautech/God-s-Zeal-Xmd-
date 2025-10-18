@@ -1,0 +1,52 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+model User {
+  id            String    @id @default(uuid())
+  username      String    @unique
+  email         String    @unique
+  password      String?
+  githubId      String?   @unique
+  githubToken   String?
+  role          String    @default("user")
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  bots          Bot[]
+}
+
+model Bot {
+  id              String    @id @default(uuid())
+  userId          String
+  user            User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  phoneNumber     String
+  status          String    @default("pending")
+  githubRepoUrl   String?
+  githubRepoName  String?
+  workflowStatus  String    @default("not_created")
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+  logs            BotLog[]
+}
+
+model BotLog {
+  id        String   @id @default(uuid())
+  botId     String
+  bot       Bot      @relation(fields: [botId], references: [id], onDelete: Cascade)
+  message   String
+  level     String   @default("info")
+  createdAt DateTime @default(now())
+}
+
+model Config {
+  id        String   @id @default(uuid())
+  key       String   @unique
+  value     String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
