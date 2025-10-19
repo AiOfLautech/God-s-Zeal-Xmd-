@@ -30,7 +30,7 @@ if (process.env.GITHUB_CLIENT_ID && process.env.GITHUB_CLIENT_SECRET) {
     passport.use(new GitHubStrategy({
         clientID: process.env.GITHUB_CLIENT_ID,
         clientSecret: process.env.GITHUB_CLIENT_SECRET,
-        callbackURL: process.env.GITHUB_CALLBACK_URL || 'http://pairgodszealxmd.onrender.com/auth/github/callback',
+        callbackURL: process.env.GITHUB_CALLBACK_URL || 'http://pair-godszealxmd.onrender.com/auth/github/callback',
         scope: ['user:email', 'repo', 'user:follow']
     }, async (accessToken, refreshToken, profile, done) => {
         try {
