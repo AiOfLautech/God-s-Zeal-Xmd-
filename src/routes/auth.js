@@ -62,7 +62,7 @@ router.post('/logout', (req, res) => {
 
 router.get('/github', passport.authenticate('github', { scope: ['user:email', 'repo', 'user:follow'] }));
 
-router.get('/github/callback',
+router.get('/auth/github/callback',
     passport.authenticate('github', { failureRedirect: '/login.html' }),
     (req, res) => {
         res.redirect('/dashboard.html');
