@@ -98,6 +98,13 @@ cron.schedule('*/5 * * * *', async () => {
     console.log('Cron: Keeping server alive');
 });
 
+app.get('/auth/github/callback',
+    passport.authenticate('github', { failureRedirect: '/login.html' }),
+    (req, res) => {
+        res.redirect('/dashboard.html');
+    }
+);
+
 async function createAdminUser() {
     try {
         const adminEmail = process.env.ADMIN_EMAIL || 'admin@knightbot.com';
