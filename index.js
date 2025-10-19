@@ -38,6 +38,9 @@ import('events').then(events => {
 
 const SQLiteSessionStore = SQLiteStore(session);
 
+// Trust proxy - Required for rate limiting when behind a reverse proxy (Render, Replit, etc.)
+app.set('trust proxy', 1);
+
 // Security middleware
 app.use(helmet({
     contentSecurityPolicy: false, // Allow inline scripts for dynamic content
